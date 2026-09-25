@@ -1,0 +1,13 @@
+# The binary this target rebuilds. Measured values only.
+cod2_lnxded_1_0a:
+  platform: linux x86 (ELF32, stripped)
+  compiler: gcc/g++ 3.3.4 -O0
+  linker: binutils 2.14.90.0.6
+  size: 1305356
+  sha256: 35c88f18ea67755619cfdec835fd326d5b0476fa3f7f18c035ecc5d47ee6f938
+  note: unpatched base build; patched variants (_va, _va_loc, _nodelay, _cracked) hash differently
+  sections:
+    .text:   980640   # 0x0ef6a0 @ 0x0804a4b0
+    .rodata: 131202   # 0x020082 @ 0x08139b80
+    .data:   59056    # 0x00e6b0 @ 0x0815a000
+    .bss:    8626404
