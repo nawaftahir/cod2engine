@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-# .text coverage by verified clean TUs (reads build/tu/*.verify from tools/tu_all.sh).
+# .text coverage by verified clean TUs (reads build/verify/*.verify from make verify).
 import glob, os, re
 
 T0, TN = 0x0804a4b0, 0xef6a0
 
 iv = []
-for f in glob.glob('build/tu/*.verify'):
+for f in glob.glob('build/verify/*.verify'):
     lines = open(f).read().splitlines()
     if not lines or lines[-1] != 'TU VERIFIED':
         continue

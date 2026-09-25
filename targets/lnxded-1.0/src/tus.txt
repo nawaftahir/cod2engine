@@ -1,10 +1,5 @@
-# clean translation units in link order: source, original .text VA ('-' no code,
-# 'link' startfile checked only by the final link), extra compiler flags
-crt/start.S                        link
-crt/abi-note.S                     link
-crt/init.S                         link
-crt/crti.S                         link
-crt/crtbegin.c                     0x804a4e0 -O2 -fno-pic -falign-functions=16 -fno-zero-initialized-in-bss
+# translation units in link order: source, original .text address ('-': no code),
+# extra compiler flags
 botlib/l_memory.cpp                0x804a5a4
 botlib/l_precomp.cpp               0x804a644
 botlib/l_script.cpp                0x804fb54
@@ -160,5 +155,3 @@ EffectsCore/FxUtil.cpp             0x8130f90
 stringed/stringed_hooks.cpp        0x8135ce0
 stringed/stringed_interface.cpp    0x8136eac -I/usr/include/c++/3.3 -I/usr/include/c++/3.3/i486-linux
 stringed/stringed_ingame.cpp       0x81370c4 -I/usr/include/c++/3.3 -I/usr/include/c++/3.3/i486-linux
-crt/crtend.c                       0x8139b20 -O2 -fno-pic -falign-functions=16
-crt/crtn.S                         link
