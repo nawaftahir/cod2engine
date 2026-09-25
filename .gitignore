@@ -1,0 +1,14 @@
+# build output
+build/
+*.o
+*.a
+*.so
+__pycache__/
+
+#binaries
+binaries/**
+
+# editor / os
+.vscode/
+.DS_Store
+core.*
