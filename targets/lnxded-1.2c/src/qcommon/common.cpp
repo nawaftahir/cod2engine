@@ -88,8 +88,7 @@ quake3 set test blah + map test
 
 void SND_ShutdownChannels( void );
 
-// 1.2c build date, baked into the startup banner
-#define BUILD_DATE "Apr 19 2006"
+#include "build_date.h"
 
 extern "C" const char *getBuildNumber( void );
 void PbCaptureConsoleOutput( char *msg, int msglen );

@@ -1,8 +1,7 @@
 #include "../qcommon/qcommon.h"
 #include "g_shared.h"
 
-// build date of the 1.2c release
-#define BUILD_DATE "Apr 19 2006"
+#include "../qcommon/build_date.h"
 
 
 level_locals_t level;

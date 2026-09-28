@@ -45,9 +45,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #include "linux_local.h"
 
 
-// dedicated server 1.2 build stamp
-#define BUILD_DATE "Apr 19 2006"
-#define BUILD_TIME "20:44:25"
+#include "../qcommon/build_date.h"
 
 unsigned sys_frame_time;
 uid_t saved_euid;
@@ -825,7 +823,7 @@ void Sys_ConfigureFPU()
 void Sys_PrintBinVersion( const char *name )
 {
 	const char *date = BUILD_DATE;
-	const char *time = BUILD_TIME;
+	const char *time = UNIX_MAIN_BUILD_TIME;
 	const char *sep = "==============================================================";
 
 	fprintf(stdout, "\n\n%s\n", sep);
