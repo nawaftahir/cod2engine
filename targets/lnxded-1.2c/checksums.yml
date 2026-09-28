@@ -1,0 +1,11 @@
+# The binary this target rebuilds. Measured values only.
+cod2_lnxded_1_2c:
+  platform: linux x86 (ELF32, stripped)
+  compiler: gcc/g++ 3.3.6 (Ubuntu 1:3.3.6-8ubuntu1); startup objects gcc 3.4.5 (Ubuntu 3.4.4-6ubuntu8)
+  linker: ld 2.16.1 (binutils 2.16.1-2ubuntu6), confirmed by the identical rebuild
+  size: 1318172
+  sha256: d6746a17195e7f0e08f75485754cdf9da6bac49408ab161b739c759aef466b2b
+  sections:
+    .text:   998112   # 0x0f3ae0 @ 0x0804a6c0
+    .rodata: 142012   # 0x022abc @ 0x0813e1c0
+    .data:   47104    # 0x00b800 @ 0x0817c380
