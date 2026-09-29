@@ -12,10 +12,10 @@ A solved address is a layout claim only; the section contents must still match.
 """
 import os, re, struct, subprocess, sys, tempfile
 
-# Run from a target directory: the original is the binary named in its checksums.yml.
+# The original is the binary named in the target's checksums.yml, in binaries/linux/.
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-NAME = next(l[:-1] for l in open('checksums.yml').read().splitlines() if l.endswith(':') and not l[0] in ' #')
-ORIG = os.environ.get('ANCHOR', os.path.join(ROOT, 'binaries/linux', NAME))
+NAME = next(l[:-1] for l in open(os.path.join(ROOT, 'checksums.yml')).read().splitlines() if l.endswith(':') and not l[0] in ' #')
+ORIG = os.environ.get('ANCHOR', os.path.join(ROOT, '../../binaries/linux', NAME))
 
 def elf(path):
     b = open(path, 'rb').read()

@@ -1,6 +1,8 @@
 # Linux dedicated server 1.0 (cod2_lnxded_1_0a).
 #   make          build build/cod2_lnxded_1_0a inside the toolchain image
 #   make check    compare its SHA-256 with checksums.yml
+#   make verify   compare every TU with the original (host python3 + binutils)
+#   make toolchain  build the toolchain image
 #   make clean
 
 IMAGE := cod2engine-linux-2005
@@ -17,10 +19,16 @@ check: all
 	@test "$$(sha256sum < $(OUT) | cut -c1-64)" = "$$(awk '/sha256:/ {print $$2}' checksums.yml)" \
 		&& echo "SHA256 IDENTICAL" || { echo "SHA256 DIFFERS"; exit 1; }
 
+verify: all
+	tools/verify.sh
+
+toolchain:
+	docker build --platform linux/386 -t $(IMAGE) ../toolchains/linux-2005
+
 clean:
 	rm -rf build
 
-.PHONY: all check clean
+.PHONY: all check verify toolchain clean
 
 else
 

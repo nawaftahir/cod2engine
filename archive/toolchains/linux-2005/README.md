@@ -10,7 +10,7 @@ as far as the binaries record it. It holds three things:
 | startup objects | `/opt/crt-2005/*.o`, built from [`crt/`](crt) | the C library and the compiler |
 
 ```sh
-docker build --platform linux/386 -t cod2engine-linux-2005 toolchains/linux-2005
+docker build --platform linux/386 -t cod2engine-linux-2005 archive/toolchains/linux-2005
 ```
 
 All sources are downloaded from GNU and kernel.org mirrors and checked against pinned

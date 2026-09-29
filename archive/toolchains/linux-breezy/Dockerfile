@@ -1,10 +1,10 @@
 # The build machine of the Linux server 1.2c/1.3 binaries: Ubuntu 5.10 "breezy", i386,
 # with gcc-3.3 3.3.6-8ubuntu1 (game code) and gcc-3.4 3.4.4-6ubuntu8 (startup objects),
 # as the binaries' .comment sections record. Packages come from old-releases.ubuntu.com.
-#   docker build --platform linux/386 -t cod2engine-linux-breezy toolchains/linux-breezy
+#   docker build --platform linux/386 -t cod2engine-linux-breezy archive/toolchains/linux-breezy
 # 1.3 was linked after breezy's glibc security update:
 #   docker build --platform linux/386 --build-arg LIBC6=2.3.5-1ubuntu12.5.10.1 \
-#       -t cod2engine-linux-breezy-1.3 toolchains/linux-breezy
+#       -t cod2engine-linux-breezy-1.3 archive/toolchains/linux-breezy
 ARG LIBC6=2.3.5-1ubuntu12
 
 FROM debian:trixie AS bootstrap

@@ -3,7 +3,7 @@
 #   binutils 2.14.90.0.6  /opt/binutils-2.14.90.0.6/bin/ld
 #   startup objects       /opt/crt-2005/{crt1,crti,crtbegin,crtend,crtn}.o
 #
-#   docker build --platform linux/386 -t cod2engine-linux-2005 toolchains/linux-2005
+#   docker build --platform linux/386 -t cod2engine-linux-2005 archive/toolchains/linux-2005
 #
 # See README.md for the evidence behind each piece.
 

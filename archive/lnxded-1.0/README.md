@@ -14,11 +14,12 @@ The rebuilt binary is the original, so it runs as the original: it loads maps, a
 |---|---|
 | `src/<module>/` | One translation unit per original source file, headers beside them |
 | `src/unknown/` | Storage-only objects whose original source files are unknown |
+| `tools/` | Verification tools (`make verify`) |
 | `src/compat/` | Compiler shim and the libc declarations as the original build saw them |
-| `imports/` | Stand-ins for the shared libraries, generated from the original's import table (`../../tools/implib.py`) |
+| `imports/` | Stand-ins for the shared libraries, generated from the original's import table (`tools/implib.py`) |
 
 The startup objects and the linker are part of the toolchain:
-[`toolchains/linux-2005`](../../toolchains/linux-2005). The imports and the reconstructed
+[`archive/toolchains/linux-2005`](../toolchains/linux-2005). The imports and the reconstructed
 startup objects stand in for the Red Hat 6-era glibc 2.1 the original was linked against;
 replacing them with that glibc is open (see `../../PLAN.md`).
 
@@ -40,13 +41,13 @@ With your own original binary in `../../binaries/linux/` (or `ANCHOR=<path>`), a
 Python 3 plus binutils on the host, after `make`:
 
 ```sh
-../../tools/verify.sh                  # every TU: prints TU VERIFIED or the difference
-python3 ../../tools/tu_verify.py build/verify/server_sv_main_mp.o 0x<address> -v
-python3 ../../tools/elfcmp.py ../../binaries/linux/cod2_lnxded_1_0a build/cod2_lnxded_1_0a -v
-python3 ../../tools/tu_cov.py          # .text covered by verified TUs
+make verify                            # every TU: prints TU VERIFIED or the difference
+python3 tools/tu_verify.py build/verify/server_sv_main_mp.o 0x<address> -v
+python3 tools/elfcmp.py ../../binaries/linux/cod2_lnxded_1_0a build/cod2_lnxded_1_0a -v
+python3 tools/tu_cov.py          # .text covered by verified TUs
 ```
 
-`verify.sh` takes each object's address from `build/link.map`. `tu_verify` places a TU at
+`tools/verify.sh` takes each object's address from `build/link.map`. `tu_verify` places a TU at
 that address and compares `.text`, `.rodata`, `.data`, `.gcc_except_table` and its
 `.eh_frame` entries with the original; it prints `TU VERIFIED` only when all of them match.
 

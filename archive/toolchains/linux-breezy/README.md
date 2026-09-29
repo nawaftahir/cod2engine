@@ -13,9 +13,9 @@ stock breezy package, pinned by version.
 | `ld` 2.16.1 | `binutils` 2.16.1-2ubuntu6 | the linker |
 
 ```sh
-docker build --platform linux/386 -t cod2engine-linux-breezy toolchains/linux-breezy
+docker build --platform linux/386 -t cod2engine-linux-breezy archive/toolchains/linux-breezy
 docker build --platform linux/386 --build-arg LIBC6=2.3.5-1ubuntu12.5.10.1 \
-    -t cod2engine-linux-breezy-1.3 toolchains/linux-breezy
+    -t cod2engine-linux-breezy-1.3 archive/toolchains/linux-breezy
 ```
 
 The build fails if the installed versions differ from the pinned ones.
