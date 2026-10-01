@@ -15,13 +15,11 @@ The rebuilt binary is the original, so it runs as the original: it loads maps, a
 | `src/<module>/` | One translation unit per original source file, headers beside them |
 | `src/unknown/` | Storage-only objects whose original source files are unknown |
 | `tools/` | Verification tools (`make verify`) |
-| `src/compat/` | Compiler shim and the libc declarations as the original build saw them |
-| `imports/` | Stand-ins for the shared libraries, generated from the original's import table (`tools/implib.py`) |
+| `src/compat/` | Compiler shim |
 
-The startup objects and the linker are part of the toolchain:
-[`archive/toolchains/linux-2005`](../toolchains/linux-2005). The imports and the reconstructed
-startup objects stand in for the Red Hat 6-era glibc 2.1 the original was linked against;
-replacing them with that glibc is open (see `../../PLAN.md`).
+It links against the libraries the original was linked against: Red Hat Linux 6.0's glibc 2.1.1
+and the libstdc++/libgcc of gcc 3.3.4, in the toolchain image
+[`archive/toolchains/linux-2005`](../toolchains/linux-2005).
 
 ## Build
 

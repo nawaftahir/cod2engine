@@ -1,78 +1,75 @@
-# The 2005 Linux build system, as far as the binaries record it:
-#   gcc/g++ 3.3.4         /usr/local/bin/gcc, g++
-#   binutils 2.14.90.0.6  /opt/binutils-2.14.90.0.6/bin/ld
-#   startup objects       /opt/crt-2005/{crt1,crti,crtbegin,crtend,crtn}.o
-#
-#   docker build --platform linux/386 -t cod2engine-linux-2005 archive/toolchains/linux-2005
-#
+# The build machine of the Linux server 1.0 binary: Red Hat Linux 6.0 (glibc 2.1.1, egcs 1.1.2)
+# with gcc 3.3.4 and binutils 2.14.90.0.x installed on top, as the binary records it.
+#   docker build --platform linux/386 --build-arg JOBS=$(nproc) -t cod2engine-linux-2005 archive/toolchains/linux-2005
 # See README.md for the evidence behind each piece.
 
-# Fetch and check the sources on a current system (sarge has no sha256sum or
-# modern TLS), and generate the linker's parser (the snapshot ships none).
+# Fetch and check everything on a current system. The Red Hat 6.0 packages are read out of
+# the release CD image on archive.org by byte range (rpms.txt: name, offset, size, sha256).
 FROM debian:trixie-slim AS src
-RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates flex bison
+RUN apt-get update && apt-get install -y --no-install-recommends curl ca-certificates flex bison rpm2cpio cpio
 WORKDIR /src
 RUN curl -fsSLO https://ftpmirror.gnu.org/gcc/gcc-3.3.4/gcc-core-3.3.4.tar.gz \
  && curl -fsSLO https://ftpmirror.gnu.org/gcc/gcc-3.3.4/gcc-g++-3.3.4.tar.gz \
  && curl -fsSLO https://mirrors.edge.kernel.org/pub/linux/devel/binutils/binutils-2.14.90.0.6.tar.gz \
+ && curl -fsSLO https://mirrors.edge.kernel.org/pub/linux/devel/binutils/binutils-2.14.90.0.8.tar.gz \
  && printf '%s  %s\n' \
     4cb79096cc37f45dcbac928db6e3c7f25dcea92f505bcdcda8dcc40105dd6759 gcc-core-3.3.4.tar.gz \
     976d3ee48f9c294fa35646222e4fb2260443b3083f6e9084bdb2631e5142ac5e gcc-g++-3.3.4.tar.gz \
     8757f67a0512ec1d55df55e35926be5faaa5ba3236f8f28b3f3dcdb613a41095 binutils-2.14.90.0.6.tar.gz \
+    c4b9887f09dc29e3548db28942c3b7d7e467f91ab05d28d0b653995772eb8fa2 binutils-2.14.90.0.8.tar.gz \
     | sha256sum -c -
-RUN tar xzf binutils-2.14.90.0.6.tar.gz && rm binutils-2.14.90.0.6.tar.gz \
- && cd binutils-2.14.90.0.6/ld \
- && flex -oldlex.c ldlex.l && bison -y -d -o ldgram.c ldgram.y
+COPY rpms.txt /src/
+RUN mkdir /rpms && while read name off size sum; do \
+        curl -fsSL --retry 5 -r $off-$((off + size - 1)) -o /rpms/$name \
+            'https://archive.org/download/PCP_0699/Red%20Hat%20Linux_i3.iso' \
+        && echo "$sum  /rpms/$name" | sha256sum -c - || exit 1; \
+    done < rpms.txt
+# Unpacked here: Red Hat 6.0's tar hangs piping through gzip on current kernels.
+# The ld snapshot ships no generated parser.
+# libgcc is built without debug info: as 2.9.1 marks gcc 3.3's .debug_* sections allocatable.
+RUN for f in *.tar.gz; do tar xzf $f && rm $f; done \
+ && sed -i 's/^LIBGCC2_DEBUG_CFLAGS = -g$/LIBGCC2_DEBUG_CFLAGS = -g0/' gcc-3.3.4/gcc/Makefile.in \
+ && cd binutils-2.14.90.0.6/ld && flex -oldlex.c ldlex.l && bison -y -d -o ldgram.c ldgram.y
+# RPM scripts do not run here: ldconfig and the kernel-source link are done below.
+RUN mkdir /rootfs && cd /rootfs && for r in /rpms/*.rpm; do rpm2cpio $r | cpio -idmu --quiet; done \
+ && ln -sfn linux-2.2.5 usr/src/linux
 
-# Debian sarge provides the host tools, including GNU as 2.15.
-FROM debian/eol:sarge
-RUN apt-get update && apt-get install -y build-essential binutils make libncurses5-dev \
- && rm -rf /var/lib/apt/lists/*
+FROM scratch AS base
+COPY --from=src /rootfs /
+RUN ["/sbin/ldconfig"]
+ENV PATH=/usr/local/bin:/usr/bin:/bin LC_ALL=C
+SHELL ["/bin/bash", "-c"]
 
-# gcc is built without HAVE_AS_LEB128: the original .gcc_except_table uses
-# udata4 call-site entries, which gcc 3.3 emits only when configure found an
-# assembler without .uleb128 support.
-COPY --from=src /src/gcc-core-3.3.4.tar.gz /src/gcc-g++-3.3.4.tar.gz /tmp/
-RUN cd /tmp \
- && tar xzf gcc-core-3.3.4.tar.gz \
- && tar xzf gcc-g++-3.3.4.tar.gz \
- && mkdir gccbuild && cd gccbuild \
- && ../gcc-3.3.4/configure \
-        --build=i686-pc-linux-gnu \
-        --host=i686-pc-linux-gnu \
-        --target=i686-pc-linux-gnu \
-        --prefix=/usr/local/gcc334 \
-        --program-suffix=-3.3.4 \
-        --enable-languages=c,c++ \
-        --disable-multilib --disable-nls --disable-shared \
- && sed -i 's|^#define HAVE_AS_LEB128 1|/* #undef HAVE_AS_LEB128 */|' gcc/auto-host.h \
- && ! grep -q '^#define HAVE_AS_LEB128' gcc/auto-host.h \
- && make MAKEINFO=true -j4 all-gcc \
- && make MAKEINFO=true install-gcc \
- && cd /tmp && rm -rf gcc-3.3.4 gccbuild gcc-*.tar.gz
-RUN ln -sf /usr/local/gcc334/bin/gcc-3.3.4 /usr/local/bin/gcc \
- && ln -sf /usr/local/gcc334/bin/g++-3.3.4 /usr/local/bin/g++
-ENV PATH=/usr/local/bin:/usr/local/gcc334/bin:$PATH
-
-# The linker: H.J. Lu's binutils 2.14.90.0.6 (2003-08-20).
+FROM base
+# uname reports the host kernel (x86_64): pin the triplet for every configure.
+ENV TRIPLET="--build=i686-pc-linux-gnu --host=i686-pc-linux-gnu --target=i686-pc-linux-gnu"
+ARG JOBS=4
+# The linker: H.J. Lu's binutils 2.14.90.0.6 (2003-08-20). It is on PATH while gcc is built,
+# which gives libstdc++ its symbol versions (GLIBCPP_3.2, CXXABI_1.2).
 COPY --from=src /src/binutils-2.14.90.0.6 /tmp/binutils-2.14.90.0.6
-RUN mkdir /tmp/bb && cd /tmp/bb \
- && export ac_cv_prog_LEX=flex ac_cv_prog_lex_root=lex.yy ac_cv_prog_lex_yytext_pointer=yes ac_cv_lib_fl_yywrap=yes \
- && ../binutils-2.14.90.0.6/configure --prefix=/opt/binutils-2.14.90.0.6 --disable-nls \
-        --build=i686-pc-linux-gnu --host=i686-pc-linux-gnu --target=i686-pc-linux-gnu >/dev/null \
- && make -j4 all-ld >/dev/null \
- && make install-ld >/dev/null \
- && cd /tmp && rm -rf bb binutils-2.14.90.0.6 \
- && /opt/binutils-2.14.90.0.6/bin/ld --version | head -1
+RUN mkdir /tmp/bld && cd /tmp/bld \
+ && ../binutils-2.14.90.0.6/configure --disable-nls $TRIPLET >/dev/null \
+ && make all-ld >/dev/null && make install-ld >/dev/null \
+ && cd / && rm -rf /tmp/bld /tmp/binutils-2.14.90.0.6 && ld --version | head -1
 
-# The startup objects linked into every program on that system.
-COPY crt /tmp/crt
-RUN mkdir /opt/crt-2005 && cd /tmp/crt \
- && for f in start abi-note init crti crtn; do gcc -c -Wa,--traditional-format $f.S -o $f.o; done \
- && gcc -c -w -O2 -fno-pic -falign-functions=16 -fno-zero-initialized-in-bss -Wa,--traditional-format crtbegin.c \
- && gcc -c -w -O2 -fno-pic -falign-functions=16 -Wa,--traditional-format crtend.c \
- && ld -r -o /opt/crt-2005/crt1.o start.o abi-note.o init.o \
- && cp crti.o crtbegin.o crtend.o crtn.o /opt/crt-2005/ \
- && cd /tmp && rm -rf crt
+# gcc 3.3.4, configured with Red Hat's as 2.9.1: it finds no .uleb128 (udata4 call sites in
+# .gcc_except_table) and puts --traditional-format in its assembler spec (advance_loc4 FDEs).
+# Everything below is built without debug info (see libgcc above).
+ENV NODEBUG="BOOT_CFLAGS=-O2 CFLAGS_FOR_TARGET=-O2 CXXFLAGS_FOR_TARGET=-O2"
+COPY --from=src /src/gcc-3.3.4 /tmp/gcc-3.3.4
+RUN mkdir /tmp/bld && cd /tmp/bld \
+ && ../gcc-3.3.4/configure $TRIPLET \
+        --enable-languages=c,c++ >/dev/null \
+ && ! grep -q '^#define HAVE_AS_LEB128' gcc/auto-host.h \
+ && { make -j$JOBS bootstrap MAKEINFO=true $NODEBUG >/tmp/gcc.log 2>&1 || { tail -30 /tmp/gcc.log; false; }; } && make install MAKEINFO=true $NODEBUG >/dev/null \
+ && cd / && rm -rf /tmp/bld /tmp/gcc-* && /sbin/ldconfig && gcc --version | head -1
+
+# The game code's assembler: gas 2.14.90.0.8 or later (earlier ones lay out local statics in
+# .bss in a different order).
+COPY --from=src /src/binutils-2.14.90.0.8 /tmp/binutils-2.14.90.0.8
+RUN mkdir /tmp/bld && cd /tmp/bld \
+ && CFLAGS=-O2 ../binutils-2.14.90.0.8/configure --disable-nls $TRIPLET >/dev/null \
+ && make all-gas >/dev/null && make install-gas >/dev/null \
+ && cd / && rm -rf /tmp/bld /tmp/binutils-* && as --version | head -1
 
 WORKDIR /work

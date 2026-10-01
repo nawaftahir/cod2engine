@@ -23,7 +23,7 @@ verify: all
 	tools/verify.sh
 
 toolchain:
-	docker build --platform linux/386 -t $(IMAGE) ../toolchains/linux-2005
+	docker build --platform linux/386 --build-arg JOBS=$$(nproc) -t $(IMAGE) ../toolchains/linux-2005
 
 clean:
 	rm -rf build
@@ -192,10 +192,11 @@ SRCS := \
 
 OBJS := $(patsubst %,build/obj/%.o,$(basename $(SRCS)))
 
-# --traditional-format: the FDEs use unrelaxed DW_CFA_advance_loc4.
-# sysroot_nothrow: the libc declarations as the original build saw them.
-CFLAGS := -w -m32 -O0 -fno-pic -DNDEBUG -DNOUNCRYPT -falign-functions=2 -Wa,--traditional-format \
-	-include src/compat/gcc334_compat.h -I/work/src/compat/sysroot_nothrow \
+# Made here, once: recipes avoid /bin/sh, whose bash 1.14 can miss a child's exit on current kernels.
+_ := $(shell mkdir -p $(sort $(dir $(OBJS))))
+
+CFLAGS := -w -O0 -DNDEBUG -DNOUNCRYPT -falign-functions=2 \
+	-include src/compat/gcc334_compat.h \
 	-Isrc/universal -Isrc -Isrc/qcommon -Isrc/game -Isrc/server -Isrc/bgame \
 	-Isrc/script -Isrc/xanim -Isrc/stringed -Isrc/unix
 
@@ -214,32 +215,22 @@ build/obj/zlib/uncompr.o: TUFLAGS := -falign-functions=1
 build/obj/zlib/unzip.o: TUFLAGS := -falign-functions=1
 build/obj/zlib/zutil.o: TUFLAGS := -falign-functions=1
 build/obj/EffectsCore/FxCurve.o: TUFLAGS := -fno-exceptions
-build/obj/stringed/stringed_interface.o: TUFLAGS := -I/usr/include/c++/3.3 -I/usr/include/c++/3.3/i486-linux
-build/obj/stringed/stringed_ingame.o: TUFLAGS := -I/usr/include/c++/3.3 -I/usr/include/c++/3.3/i486-linux
 
 build/obj/%.o: src/%.cpp
-	@mkdir -p $(@D)
 	g++ $(CFLAGS) $(TUFLAGS) -MMD -MP -c $< -o $@
 
 build/obj/%.o: src/%.c
-	@mkdir -p $(@D)
 	gcc $(CFLAGS) $(TUFLAGS) -MMD -MP -c $< -o $@
 
-# Stand-ins for the shared libraries: the original's imports, nothing more.
-CRT  := /opt/crt-2005
-LD   := /opt/binutils-2.14.90.0.6/bin/ld
-PRE  := libdl.so.2 libpthread.so.0
-POST := libstdc++.so.5 libm.so.6 libgcc_s.so.1 libc.so.6
+# The original link was g++ -ldl -lpthread <objects>. This is that command expanded, without
+# the --eh-frame-hdr the gcc driver adds when built against a newer ld.
+GCCLIB := /usr/local/lib/gcc-lib/i686-pc-linux-gnu/3.3.4
 
-build/lib/%: imports/%.S imports/%.map
-	@mkdir -p $(@D)
-	gcc -m32 -shared -nostdlib -Wl,-soname,$* -Wl,--version-script,imports/$*.map -o $@ $<
-
-# The original link command was g++ -ldl -lpthread <objects>.
-$(OUT): $(OBJS) $(addprefix build/lib/,$(PRE) $(POST))
-	$(LD) -m elf_i386 -s -Map build/link.map -dynamic-linker /lib/ld-linux.so.2 -o $@ \
-		$(CRT)/crt1.o $(CRT)/crti.o $(CRT)/crtbegin.o $(addprefix build/lib/,$(PRE)) \
-		$(OBJS) $(addprefix build/lib/,$(POST)) $(CRT)/crtend.o $(CRT)/crtn.o
+$(OUT): $(OBJS)
+	ld -m elf_i386 -s -Map build/link.map -dynamic-linker /lib/ld-linux.so.2 -o $@ \
+		/usr/lib/crt1.o /usr/lib/crti.o $(GCCLIB)/crtbegin.o -L$(GCCLIB) -L$(GCCLIB)/../../.. \
+		-ldl -lpthread $(OBJS) -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc \
+		$(GCCLIB)/crtend.o /usr/lib/crtn.o
 
 -include $(OBJS:.o=.d)
 
