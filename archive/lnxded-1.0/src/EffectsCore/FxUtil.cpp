@@ -1368,7 +1368,7 @@ void FX_AddVisibility()
 	}
 }
 
-float FX_GetVisibility( const vec3_t start, const vec3_t end )
+float FX_GetServerVisibility( const vec3_t start, const vec3_t end )
 {
 	int i;
 	vec3_t dir;
@@ -1586,8 +1586,7 @@ int FX_Restore( MemoryFile *memFile )
 	return arch.GetUsedSize();
 }
 
-// Original name unknown.
-static int FX_CompareSortedEffects( const void *arg1, const void *arg2 )
+static int CompareSortedEffects( const void *arg1, const void *arg2 )
 {
 	int unused;
 	const SortedEffect *se2;
@@ -1635,8 +1634,7 @@ static int FX_CompareSortedEffects( const void *arg1, const void *arg2 )
 	return result;
 }
 
-// Original name unknown.
-static int FX_CompareSortedClusters( const void *arg1, const void *arg2 )
+static int CompareSortedClusters( const void *arg1, const void *arg2 )
 {
 	const SortedCluster *sc2;
 	const SortedCluster *sc1;
@@ -1664,15 +1662,14 @@ static void FX_SortEffects( SortedEffect *list, int count )
 		sorted[i].index = i;
 		sorted[i].distSq = Vec3DistanceSq(effectClusters[i].origin, theFxHelper->mCamera.vieworg);
 	}
-	qsort(sorted, effectClusterCount, sizeof(SortedCluster), FX_CompareSortedClusters);
+	qsort(sorted, effectClusterCount, sizeof(SortedCluster), CompareSortedClusters);
 	for ( i = 0; i < effectClusterCount; i++ )
 		rank[sorted[i].index] = i;
 	clusterSort = rank;
-	qsort(list, count, sizeof(SortedEffect), FX_CompareSortedEffects);
+	qsort(list, count, sizeof(SortedEffect), CompareSortedEffects);
 	clusterSort = 0;
 }
 
-// Original name unknown.
 void FX_UpdateAllBolt()
 {
 	int i;
@@ -1700,7 +1697,6 @@ void FX_UpdateAllBolt()
 	FX_FreeRemovedBolt();
 }
 
-// Original name unknown.
 void FX_UpdateAllNonBolt()
 {
 	int i;
@@ -1847,7 +1843,6 @@ void FX_DrawAll()
 	}
 }
 
-// Original name unknown.
 void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origin, vec3_t axis[3] )
 {
 	float yaw;
@@ -1927,8 +1922,7 @@ void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origi
 	}
 }
 
-// Original name unknown.
-void FX_CalcImpactOrigin( const PrimitiveTemplate *primTemp, const vec3_t origin, vec3_t out, const vec3_t offset, const vec3_t *axis )
+void FX_CalcOrigin2( const PrimitiveTemplate *primTemp, const vec3_t origin, vec3_t out, const vec3_t offset, const vec3_t *axis )
 {
 	trace_t trace;
 	vec3_t end;
@@ -2014,7 +2008,6 @@ bool FX_AddPrimitive( EffectPrimitive *prim, Effect *fx, const vec3_t origin )
 	return true;
 }
 
-// Original name unknown.
 void FX_SetSortGroup( Effect *fx )
 {
 	fx->mSortGroup = 0;
@@ -2022,7 +2015,6 @@ void FX_SetSortGroup( Effect *fx )
 		fx->mSortGroup = -1;
 }
 
-// Original name unknown.
 void FX_SetMaterialAndSequenceParams( const PrimitiveTemplate *primTemp, Particle *particle, int duration, int indexInBatch )
 {
 	TMediaElement material;
@@ -2070,7 +2062,6 @@ void FX_SetMaterialAndSequenceParams( const PrimitiveTemplate *primTemp, Particl
 	FX_SetSortGroup(particle);
 }
 
-// Original name unknown.
 void FX_InitParticle( EffectPrimitive *prim, Particle *particle, vec3_t newOrigin, const vec3_t origin, vec3_t axis[3], int indexInBatch )
 {
 	const PrimitiveTemplate *primTemp;
@@ -2099,7 +2090,6 @@ void FX_InitParticle( EffectPrimitive *prim, Particle *particle, vec3_t newOrigi
 	particle->SetRotation(FxRange_GetVal(&primTemp->mRotation));
 }
 
-// Original name unknown.
 void FX_AddParticle( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int lateTime, int indexInBatch )
 {
 	Particle *particle;
@@ -2121,7 +2111,6 @@ void FX_AddParticle( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin,
 	particle->SetOrigin(newOrigin);
 }
 
-// Original name unknown.
 void FX_AddLine( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int lateTime, int indexInBatch )
 {
 	Line *line;
@@ -2147,7 +2136,7 @@ void FX_AddLine( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int
 	FX_CalcOriginAndAxis(prim, start, origin, axis);
 	line->SetAxis(axis);
 	primTemp = prim->primTemp;
-	FX_CalcImpactOrigin(primTemp, start, end, origin, axis);
+	FX_CalcOrigin2(primTemp, start, end, origin, axis);
 	VectorCopy(start, startOut);
 	VectorCopy(end, endOut);
 	material = primTemp->mMediaHandles.GetHandle();
@@ -2174,7 +2163,6 @@ void FX_AddLine( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int
 	FX_SetSortGroup(line);
 }
 
-// Original name unknown.
 void FX_AddTail( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int lateTime, int indexInBatch )
 {
 	Tail *tail;
@@ -2201,7 +2189,6 @@ void FX_AddTail( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int
 	tail->InitEndPoint();
 }
 
-// Original name unknown.
 void FX_AddCylinder( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int lateTime, int indexInBatch )
 {
 	Cylinder *cylinder;
@@ -2238,7 +2225,6 @@ void FX_AddCylinder( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin,
 	cylinder->SetOrigin(originOut);
 }
 
-// Original name unknown.
 void FX_AddEmitter( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, int lateTime, int indexInBatch )
 {
 	Emitter *emitter;
@@ -2444,7 +2430,6 @@ void FX_AddCloud( EffectPrimitive *prim, vec3_t axis[3], const vec3_t origin, in
 	cloud->mUseLength = primTemp->useLength;
 }
 
-// Original name unknown.
 void FX_AddScheduledEffects()
 {
 	orientation_t orient;
@@ -2481,8 +2466,7 @@ void FX_AddScheduledEffects()
 	}
 }
 
-// Original name unknown.
-void FX_UpdateNonBolt()
+void FX_UpdateScheduledEffectsNonBolt()
 {
 	if ( !fx_enable->current.boolean )
 		return;
@@ -2492,8 +2476,7 @@ void FX_UpdateNonBolt()
 	FX_CollectVisibleNonBolt();
 }
 
-// Original name unknown.
-void FX_UpdateBolt()
+void FX_UpdateScheduledEffectsBolt()
 {
 	if ( !fx_enable->current.boolean )
 		return;
@@ -2503,8 +2486,7 @@ void FX_UpdateBolt()
 	FX_CollectVisibleBolt();
 }
 
-// Original name unknown.
-void FX_UpdateAndDraw()
+void FX_DrawScheduledEffects()
 {
 	int count;
 

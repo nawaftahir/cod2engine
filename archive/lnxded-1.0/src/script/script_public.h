@@ -1225,7 +1225,7 @@ void Scr_AllocGameVariable();
 void Scr_DumpScriptThreads();
 void Scr_DumpScriptVariablesDefault();
 void VM_Shutdown();
-void Scr_ShutdownVariables();
+void Var_Shutdown();
 void Var_Init();
 
 void SetAnimCheck(int bAnimCheck);

@@ -1,6 +1,6 @@
 #include "../qcommon/qcommon.h"
 
-// Two empty functions nothing in the game calls; original names unknown.
+// The two functions and the table are not in the Mac build; their names and meaning are unknown.
 
 void UnusedStubA(void)
 {
@@ -10,7 +10,6 @@ void UnusedStubB(void)
 {
 }
 
-// Original contents unknown; unreferenced.
 static unsigned char unusedTable[152] =
 {
 	0xdc, 0x81, 0xff, 0x6c, 0xf4, 0xa3, 0xab, 0x37, 0x85, 0x41, 0xc7, 0x24,
@@ -28,6 +27,5 @@ static unsigned char unusedTable[152] =
 	0x98, 0x6a, 0x7c, 0x4e, 0x76, 0x50, 0x1c, 0x2a
 };
 
-// Storage size from the layout; only the engineState_t members are referenced.
-static char engineStateStorage[0x700];
-engineState_t *engineState = (engineState_t *)engineStateStorage;
+static char legacyHacksArray[0x700];
+LegacyHacks *legacyHacks = (LegacyHacks *)legacyHacksArray;

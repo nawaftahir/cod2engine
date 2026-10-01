@@ -584,7 +584,7 @@ int Cmd_TokenizeStringInternal( const char *text_in, int max_tokens, char **argv
 	return argc;
 }
 
-void Cmd_TokenizeStringWithLimit( const char *text_in, int max_tokens )
+void Cmd_TokenizeString2( const char *text_in, int max_tokens )
 {
 	cmd_argc = Cmd_TokenizeStringInternal(text_in, max_tokens, cmd_argv, cmd_tokenized);
 }
@@ -597,7 +597,7 @@ void SV_Cmd_TokenizeStringWithLimit( const char *text_in, int max_tokens )
 
 void Cmd_TokenizeString( const char *text_in )
 {
-	Cmd_TokenizeStringWithLimit(text_in, 0);
+	Cmd_TokenizeString2(text_in, 0);
 }
 
 

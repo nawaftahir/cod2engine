@@ -1077,7 +1077,7 @@ void Com_InitDvars()
 	cl_paused = Dvar_RegisterInt("cl_paused", 0, 0, 2, DVAR_ROM | DVAR_CHANGEABLE_RESET);
 	com_sv_running = Dvar_RegisterBool("sv_running", false, DVAR_ROM | DVAR_CHANGEABLE_RESET);
 
-	engineState->clientActive = 0;
+	legacyHacks->cl_running = 0;
 
 	com_introPlayed = Dvar_RegisterBool("com_introPlayed", false, DVAR_ARCHIVE | DVAR_CHANGEABLE_RESET);
 	com_animCheck = Dvar_RegisterBool("com_animCheck", false, DVAR_CHANGEABLE_RESET);

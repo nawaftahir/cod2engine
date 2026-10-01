@@ -59,12 +59,12 @@ SRCS := \
 	universal/dvar_cmds.cpp \
 	universal/com_files_mp.cpp \
 	qcommon/huffman.cpp \
-	qcommon/unused_stubs.cpp \
+	qcommon/legacyhacks.cpp \
 	qcommon/md4.cpp \
 	qcommon/msg_mp.cpp \
 	unknown/after_msg_mp.cpp \
 	qcommon/net_chan_mp.cpp \
-	qcommon/unused_buffer.cpp \
+	qcommon/statmonitor.cpp \
 	script/scr_animtree.cpp \
 	script/scr_compiler.cpp \
 	unknown/after_scr_compiler.cpp \

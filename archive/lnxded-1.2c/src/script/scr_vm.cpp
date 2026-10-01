@@ -277,7 +277,7 @@ void Scr_Shutdown()
 	scrVarPub.bInited = false;
 
 	VM_Shutdown();
-	Scr_ShutdownVariables();
+	Var_Shutdown();
 	SL_Shutdown();
 }
 

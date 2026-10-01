@@ -932,7 +932,7 @@ void SV_Init()
 	sv_reconnectlimit = Dvar_RegisterInt("sv_reconnectlimit", 3, 0, 1800, DVAR_ARCHIVE | DVAR_CHANGEABLE_RESET);
 	sv_padPackets = Dvar_RegisterInt("sv_padPackets", 0, 0, INT_MAX, DVAR_CHANGEABLE_RESET);
 
-	engineState->serverKilled = 0;
+	legacyHacks->sv_killserver = 0;
 
 	sv_allowedClan1 = Dvar_RegisterString("sv_allowedClan1", "", DVAR_CHANGEABLE_RESET);
 	sv_allowedClan2 = Dvar_RegisterString("sv_allowedClan2", "", DVAR_CHANGEABLE_RESET);

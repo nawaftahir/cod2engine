@@ -17,19 +17,19 @@ inline void AxisTransposeTransformVector(const vec3_t in, const vec3_t mat[3], v
 	out[2] = in[0] * mat[2][0] + in[1] * mat[2][1] + in[2] * mat[2][2];
 }
 
-// Backing storage for the placeholder model used when a load fails.
-struct XModelDefaults
+// Backing storage for the default model used when a load fails.
+struct XModelDefault
 {
 	unsigned short boneNames[1];
 	XBoneHierarchy hierarchy;
-	XModelParts modelPart;
-	XModelSurfs surface;
+	XModelParts modelParts;
+	XModelSurfs modelSurf;
 	XBoneInfo boneInfo;
-	byte partClassification;
-	unsigned short surfName;
+	byte partClassification[1];
+	unsigned short surfNames[1];
 };
 
-static XModelDefaults xmodelDefaults;
+XModelDefault g_default;
 static int xmodel_unreferenced[2];	// unreferenced storage, sized from the layout
 static int xmodelUnusedValue;
 
@@ -90,19 +90,19 @@ XModelParts *SetDefaultModelPart()
 	numRootBones = 1;
 	numBones = 1;
 
-	names = xmodelDefaults.boneNames;
-	hierarchy = &xmodelDefaults.hierarchy;
+	names = g_default.boneNames;
+	hierarchy = &g_default.hierarchy;
 	hierarchy->names = names;
 
-	parts = &xmodelDefaults.modelPart;
+	parts = &g_default.modelParts;
 	parts->hierarchy = hierarchy;
 	parts->quats = NULL;
 	parts->trans = NULL;
 	parts->numBones = numBones;
 	parts->numRootBones = numRootBones;
-	parts->partClassification = &xmodelDefaults.partClassification;
+	parts->partClassification = g_default.partClassification;
 
-	xmodelDefaults.partClassification = 0;
+	g_default.partClassification[0] = 0;
 	names[0] = 0;
 
 	return parts;
@@ -112,7 +112,7 @@ XModelSurfs *SetDefaultSurface()
 {
 	XModelSurfs *surface;
 
-	surface = &xmodelDefaults.surface;
+	surface = &g_default.modelSurf;
 	surface->surf = NULL;
 
 	return surface;
@@ -134,8 +134,8 @@ void SetDefaultModel(XModel *model)
 		model->lodInfo[i].filename = "";
 		model->lodInfo[i].dist = 0;
 		model->lodInfo[i].numsurfs = 1;
-		model->lodInfo[i].surfNames = &xmodelDefaults.surfName;
-		xmodelDefaults.surfName = 0;
+		model->lodInfo[i].surfNames = g_default.surfNames;
+		g_default.surfNames[0] = 0;
 	}
 
 	model->lodInfo[0].surfs = SetDefaultSurface();
@@ -143,7 +143,7 @@ void SetDefaultModel(XModel *model)
 	model->collLod = 0;
 	model->name = "DEFAULT";
 
-	boneInfo = &xmodelDefaults.boneInfo;
+	boneInfo = &g_default.boneInfo;
 
 	mins = boneInfo->bounds[0];
 	mins[0] = -16;
@@ -281,7 +281,7 @@ void XModelGetBounds(const XModel *model, float *mins, float *maxs)
 	VectorCopy(model->maxs, maxs);
 }
 
-const char *XModelGetLodFilename(const XModel *model, int lod)
+const char *XModelGetLodName(const XModel *model, int lod)
 {
 	return model->lodInfo[lod].filename;
 }

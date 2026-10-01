@@ -479,7 +479,7 @@ void SV_DObjCalcSkel(gentity_s *ent, int *partBits);
 int SV_DObjGetBoneIndex(const gentity_s *ent, unsigned int boneName);
 void SV_DObjDumpInfo(gentity_s *ent);
 DObjAnimMat* SV_DObjGetMatrixArray(gentity_s *ent);
-bool SV_GetClientPositionsAtTime(int clientNum, int gametime, float *origin);
+bool SV_GetClientPositionAtTime(int clientNum, int gametime, float *origin);
 void SV_WriteDownloadToClient( client_t *cl, msg_t *msg );
 int SV_GetClientPing(int clientNum);
 void SV_GameSendServerCommand(int clientnum, int svscmd_type, const char *text);

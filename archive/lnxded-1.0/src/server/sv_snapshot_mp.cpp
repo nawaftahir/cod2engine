@@ -3,7 +3,7 @@
 
 /*
 ===============
-SV_GetClientPositionsAtTime
+SV_GetClientPositionAtTime
 ===============
 */
 // The frame biases are initialized data, not constants.
@@ -1041,7 +1041,7 @@ qboolean SV_GetCurrentClientInfo( int clientNum, playerState_t *ps, clientState_
 	return qtrue;
 }
 
-bool SV_GetClientPositionsAtTime( int clientNum, int gametime, vec3_t pos )
+bool SV_GetClientPositionAtTime( int clientNum, int gametime, vec3_t pos )
 {
 	int j;
 	float progress;

@@ -331,12 +331,12 @@ void XAnimFreeList(XAnim_s *anims)
 }
 
 
-static byte xanimUnusedFlag;
+bool g_disableLeakCheck;
 
 // unreferenced
-void XAnimSetUnusedFlag()
+void XAnimDisableLeakCheck()
 {
-	xanimUnusedFlag = 1;
+	g_disableLeakCheck = 1;
 }
 
 int XAnimTreeSize(int size)
@@ -2500,7 +2500,7 @@ float XAnimGetWeight(const XAnimTree_s *tree, unsigned int animIndex)
 }
 
 
-bool XAnimHasFinishedOrLooped( const XAnimTree_s *tree, unsigned int animIndex )
+bool XAnimHasFinished( const XAnimTree_s *tree, unsigned int animIndex )
 {
 	unsigned short index;
 	const XAnimState *state;

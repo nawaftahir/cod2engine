@@ -5,8 +5,6 @@ void PbServerForceProcess();
 
 #define SV_OUTPUTBUF_LENGTH ( 16384 - 16 )
 
-static netadr_t masterAdr;
-
 /*
 =================
 SV_MasterAddress
@@ -14,11 +12,13 @@ SV_MasterAddress
 */
 netadr_t *SV_MasterAddress()
 {
-	if ( !masterAdr.type )
+	static netadr_t adr;
+
+	if ( !adr.type )
 	{
 		Com_Printf( "Resolving %s\n", MASTER_SERVER_NAME );
 
-		if ( !NET_StringToAdr( MASTER_SERVER_NAME, &masterAdr ) )
+		if ( !NET_StringToAdr( MASTER_SERVER_NAME, &adr ) )
 		{
 			Com_Printf( "Couldn't resolve address: " MASTER_SERVER_NAME "\n" );
 		}
@@ -26,16 +26,16 @@ netadr_t *SV_MasterAddress()
 		{
 			if ( !strstr( ":", MASTER_SERVER_NAME ) )
 			{
-				masterAdr.port = BigShort( PORT_MASTER );
+				adr.port = BigShort( PORT_MASTER );
 			}
 
 			Com_Printf( MASTER_SERVER_NAME " resolved to %i.%i.%i.%i:%i\n",
-				masterAdr.ip[0], masterAdr.ip[1], masterAdr.ip[2], masterAdr.ip[3],
-				BigShort( masterAdr.port ) );
+				adr.ip[0], adr.ip[1], adr.ip[2], adr.ip[3],
+				BigShort( adr.port ) );
 		}
 	}
 
-	return &masterAdr;
+	return &adr;
 }
 
 /*

@@ -346,10 +346,10 @@ void Var_Init()
 
 /*
 ==============
-Scr_ShutdownVariables
+Var_Shutdown
 ==============
 */
-void Scr_ShutdownVariables()
+void Var_Shutdown()
 {
 	if ( scrVarPub.gameId )
 	{

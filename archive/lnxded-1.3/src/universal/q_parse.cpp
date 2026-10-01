@@ -148,7 +148,7 @@ void Com_SetScriptWarningPrefix( const char *prefix )
 	pi->warningPrefix = prefix;
 }
 
-void Com_ScriptErrorDrop( const char *msg, ... )
+void Com_ScriptError( const char *msg, ... )
 {
 	va_list va;
 	char string[MAXPRINTMSG];
@@ -208,7 +208,7 @@ void Com_UngetToken()
 
 	if ( pi->ungetToken )
 	{
-		Com_ScriptErrorDrop( "UngetToken called twice" );
+		Com_ScriptError( "UngetToken called twice" );
 	}
 
 	pi->ungetToken = true;
@@ -810,7 +810,7 @@ qboolean Com_MatchToken( const char **buf_p, const char *match, qboolean warning
 	}
 	else
 	{
-		Com_ScriptErrorDrop( "MatchToken: %s != %s\n", token, match );
+		Com_ScriptError( "MatchToken: %s != %s\n", token, match );
 	}
 
 	return qfalse;

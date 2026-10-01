@@ -1080,18 +1080,18 @@ void SV_Frame( int msec )
 	int frameMsec;
 	char mapname[MAX_QPATH];
 
-	if ( engineState->serverKilled )
+	if ( legacyHacks->sv_killserver )
 	{
-		if ( engineState->killMessage )
+		if ( legacyHacks->sv_killreason )
 		{
-			Com_Shutdown( engineState->killMessage );
+			Com_Shutdown( legacyHacks->sv_killreason );
 		}
 		else
 		{
 			Com_Shutdown("EXE_SERVERKILLED");
 		}
 
-		engineState->serverKilled = false;
+		legacyHacks->sv_killserver = false;
 		return;
 	}
 

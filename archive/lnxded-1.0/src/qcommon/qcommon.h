@@ -411,17 +411,36 @@ void Huff_offsetTransmit( huff_t *huff, int ch, byte *fout, int *offset );
 void Huff_putBit( int bit, byte *fout, int *offset );
 int  Huff_getBit( byte *fout, int *offset );
 
-// Engine state reached through a pointer; original name unknown. Only these members are referenced; the gap and the
-// message extent are not.
-struct engineState_t
+// legacyhacks.cpp: state shared with the client and UI modules (names from the Mac build's STABS).
+struct LegacyHacks
 {
-	int unknown0;
-	int clientActive;
-	char unknown8[0xd5];
-	bool serverKilled;
-	char killMessage[1];
+	int cg_norender;
+	int cl_running;
+	int cl_stance;
+	int cl_stanceTemp;
+	int cl_downloadSize;
+	int cl_downloadCount;
+	int cl_downloadTime;
+	char cl_downloadName[64];
+	char cl_serverloadmap[64];
+	char cl_serverloadgametype[64];
+	bool cl_serverloadwaiting;
+	bool sv_killserver;
+	char sv_killreason[256];
+	char ui_scriptMenu[256];
+	int ui_scriptMenuIndex;
+	char ui_newScriptMenu[256];
+	int ui_newScriptMenuIndex;
+	char ui_waitingScriptMenu[256];
+	int ui_waitingScriptMenuIndex;
+	bool ui_waitingScriptMenuNoMouse;
+	bool ui_scriptMenuAllowResponse;
+	char ui_savegameName[256];
+	char ui_savegameInfo[256];
+	bool winnt;
+	int persid;
 };
-extern engineState_t *engineState;
+extern LegacyHacks *legacyHacks;
 
 // 1.0 msg_mp.cpp interface
 void MSG_Init( msg_t *buf, byte *data, int length );

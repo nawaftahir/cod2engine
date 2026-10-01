@@ -4,7 +4,7 @@
 #include "../qcommon/netchan.h"
 
 
-float FX_GetVisibility( const vec3_t start, const vec3_t end );
+float FX_GetServerVisibility( const vec3_t start, const vec3_t end );
 
 int botport = 0;
 
@@ -1902,7 +1902,7 @@ SV_FX_GetVisibility
 */
 float SV_FX_GetVisibility( const vec3_t start, const vec3_t end )
 {
-	return FX_GetVisibility( start, end );
+	return FX_GetServerVisibility( start, end );
 }
 
 static void SV_UpdateUserinfo_f( client_t *cl );
@@ -2007,7 +2007,7 @@ static qboolean SV_ClientCommand( client_t *cl, msg_t *msg )
 	// but not other people
 	// We don't do this when the client hasn't been active yet since its
 	// normal to spam a lot of commands when downloading
-	if (!engineState->clientActive &&
+	if (!legacyHacks->cl_running &&
 	        cl->state >= CS_ACTIVE &&      // (SA) this was commented out in Wolf.  Did we do that?
 	        sv_floodProtect->current.boolean &&
 	        svs.time < cl->nextReliableTime &&

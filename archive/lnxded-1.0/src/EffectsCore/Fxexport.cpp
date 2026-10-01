@@ -81,8 +81,7 @@ void FX_PlayEffect( const FxEffectDef *fx, const vec3_t origin, const vec3_t dir
 	theFxScheduler->PlayEffect(fx, origin, dir);
 }
 
-// Original name unknown.
-void FX_PlayOrientedEffect( const FxEffectDef *fx, const vec3_t origin, const vec3_t forward, const vec3_t up )
+void FX_PlayEffect( const FxEffectDef *fx, const vec3_t origin, const vec3_t forward, const vec3_t up )
 {
 	theFxScheduler->PlayEffect(fx, origin, forward, up);
 }

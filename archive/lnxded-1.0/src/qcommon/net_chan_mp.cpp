@@ -94,7 +94,7 @@ void NetProf_PrepProfiling( netProfileInfo_t **pProf )
 	{
 		if ( !net_iProfilingOn )
 		{
-			if ( !com_sv_running->current.boolean || ( engineState->clientActive && net_profile->current.integer == 2 ) )
+			if ( !com_sv_running->current.boolean || ( legacyHacks->cl_running && net_profile->current.integer == 2 ) )
 				net_iProfilingOn = 1;
 			else
 				net_iProfilingOn = 2;
