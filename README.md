@@ -9,6 +9,7 @@ A byte-accurate reconstruction of the Call of Duty 2 engine source.
 | `archive/lnxded-1.0` | Linux dedicated server 1.0 | GCC 3.3.4 | SHA-identical |
 | `archive/lnxded-1.2c` | Linux dedicated server 1.2c | GCC 3.3.6 | SHA-identical |
 | `archive/lnxded-1.3` | Linux dedicated server 1.3 | GCC 3.3.6 | SHA-identical |
+| `archive/mp-1.0` | Call of Duty 2 multiplayer client 1.0 (Windows, CoD2MP_s.exe) | MSVC 7.1 /GL + /LTCG | in progress (99.948%) |
 
 ## Building
 
