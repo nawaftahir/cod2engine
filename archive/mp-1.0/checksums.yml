@@ -1,0 +1,13 @@
+# The binary this target rebuilds. Measured values only.
+CoD2MP_s.exe:
+  platform: windows x86 (PE32, fixed image base 0x400000)
+  compiler: Visual C++ .NET 2003 (cl 13.10.3077) /O2 /GL, link 7.10 /LTCG
+  size: 1703936
+  sha256: 8caf434c9509020b9c94720d0407a31d61411312996dab9964f46865f070900e
+  sections:
+    .text:  1409024   # @ 0x00401000
+    .rdata: 200704    # @ 0x00559000
+    .data:  73728     # @ 0x0058a000
+    .rsrc:  16384     # @ 0x01836000
+  status: in progress
+  same-offset section bytes: 1698959 / 1699840 (99.948%), 881 differ   # 2026-10-31, tools/shameter.py

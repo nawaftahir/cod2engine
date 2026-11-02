@@ -1,0 +1,47 @@
+#include "common_types.h"
+#include "imports.h"
+
+extern "C" __declspec(dllimport) DWORD __stdcall GetCurrentThreadId(void);
+extern void Com_InitThreadData(int index);
+
+static void *g_threadValues[5];
+static DWORD threadId[1];
+
+void Sys_InitMainThread(void)
+{
+    threadId[0] = GetCurrentThreadId();
+    Com_InitThreadData(0);
+}
+Bool Sys_ReturnFalse(void)
+{
+    return 0;
+}
+
+Bool Sys_IsMainThread(void)
+{
+    return GetCurrentThreadId() == threadId[0] ? 1 : 0;
+}
+
+void Sys_SetValue(int valueIndex, void *data)
+{
+    g_threadValues[valueIndex] = data;
+}
+
+void *Sys_GetValue(int valueIndex)
+{
+    return g_threadValues[valueIndex];
+}
+
+// Original name unknown.
+
+// retail 0x45f960, empty and unreferenced; name unknown
+Bool Sys_ReturnFalse_45f960(void)
+{
+    return 0;
+}
+
+// retail 0x45f970, empty and unreferenced; name unknown
+Bool Sys_ReturnFalse_45f970(void)
+{
+    return 0;
+}
