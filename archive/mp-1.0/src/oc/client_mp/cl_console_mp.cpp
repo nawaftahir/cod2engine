@@ -1206,7 +1206,8 @@ static void ConDrawInput_DetailedCmdMatch(const char *str)
 
     ConDrawInput_Box(1, con_inputHintBoxColor->current.vector);
     ConDrawInput_Text(str, con_inputCommandMatchColor);
-    conDrawInputGlob.y += conDrawInputGlob.fontHeight;
+    float cy = conDrawInputGlob.y;
+    conDrawInputGlob.y = cy + conDrawInputGlob.fontHeight;
     conDrawInputGlob.x = conDrawInputGlob.leftX;
     if (Cmd_Argc() == 2) {
         files = Cmd_GetAutoCompleteFileList(str, &fileCount, 10);

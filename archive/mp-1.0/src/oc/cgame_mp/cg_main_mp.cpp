@@ -1264,17 +1264,32 @@ static void CG_CreateDObj(DObjModel_s *dobjModels, unsigned short numModels, str
     Com_ClientDObjCreate(dobjModels, numModels, tree, handle);
 }
 
+// XAnimCreateTree written out: only shape that matches retail (Mac 1.3 calls it; HYPOTHESIS spelling)
+int XAnimTreeSize(int size);
 static void CG_InitXAnimTrees(void)
 {
     XAnim *anims;
-    clientInfo_t *ci;
+    unsigned int *animsSize;
+    XAnimTree_s *tree;
+    int size;
     int i;
 
-    anims = (XAnim *)cg->bgs.generic_human.tree.anims;
-    for (i = 0, ci = cg->bgs.clientinfo; i < 64; i++, ci++)
-        ci->pXAnimTree = XAnimCreateTree(anims, (Alloc_t)Hunk_AllocXAnimClient);
-    for (i = 0; i < 8; i++)
-        cgs->corpseinfo[i].pXAnimTree = XAnimCreateTree(anims, (Alloc_t)Hunk_AllocXAnimClient);
+    anims = cg->bgs.generic_human.tree.anims;
+    animsSize = &cg->bgs.generic_human.tree.anims->size;
+    for (i = 0; i < 64; i++) {
+        size = XAnimTreeSize(*animsSize);
+        tree = (XAnimTree_s *)Hunk_AllocXAnimClient(size);
+        memset(tree, 0, size);
+        tree->anims = anims;
+        cg->bgs.clientinfo[i].pXAnimTree = tree;
+    }
+    for (i = 0; i < 8; i++) {
+        size = XAnimTreeSize(*animsSize);
+        tree = (XAnimTree_s *)Hunk_AllocXAnimClient(size);
+        memset(tree, 0, size);
+        tree->anims = anims;
+        cgs->corpseinfo[i].pXAnimTree = tree;
+    }
 }
 
 static void CG_FreeAnimTreeInstances(void)

@@ -1888,6 +1888,7 @@ void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origi
 	float cosPitch;
 	float len;
 	float width;
+	float scale;
 	vec3_t dir;
 	vec3_t point;
 	vec3_t up = { 0.0f, 0.0f, 1.0f };
@@ -1909,7 +1910,7 @@ void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origi
 		FastSinCos(pitch, &sinPitch, &cosPitch);
 		radius = primTemp->mRadius.GetVal();
 		height = primTemp->mHeight.GetVal();
-		radius *= sinPitch; VectorSet(dir, radius * sinYaw, radius * cosYaw, height * cosPitch);
+		scale = radius * sinPitch; VectorSet(dir, scale * sinYaw, scale * cosYaw, height * cosPitch);
 		VectorAdd(pos, dir, pos);
 		if ( primTemp->mSpawnFlags & 2 )
 		{

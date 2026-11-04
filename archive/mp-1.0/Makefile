@@ -25,6 +25,7 @@ $(OUT) all:
 release:
 	@mkdir -p build && python3 tools/rsrc.py $(ANCHOR) build/cod2mp.ico
 	@mkdir -p build/lib && cp -p $(DXSDK)/Lib/d3d9.lib build/lib/d3d9.lib
+	@gcc -m32 -shared -fPIC -O2 -o build/guidpin.so guidpin.c
 	docker run --rm -v $(CURDIR):/w -w /w $(IMAGE) sh -c 'make -j$$(nproc) -k IN_IMAGE=1 $(REL); s=$$?; chown -R $(shell id -u):$(shell id -g) build; exit $$s'
 	@sha256sum $(REL) $(ANCHOR)
 

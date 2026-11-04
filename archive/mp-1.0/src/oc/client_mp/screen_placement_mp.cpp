@@ -157,13 +157,13 @@ void CalcScreenX(float *x, int horzAlign)
         break;
     case 0:
         scaled = SP->scaleVirtualToReal[0] * *x;
-        *x = scaled + SP->virtualScreenOffsetX + SP->subScreenLeft;
+        scaled = scaled + SP->virtualScreenOffsetX; *x = scaled + SP->subScreenLeft;
         break;
     case 5:
         break;
     default:
         scaled = SP->scaleVirtualToReal[0] * *x;
-        *x = scaled + SP->virtualScreenOffsetX + SP->subScreenLeft;
+        scaled = scaled + SP->virtualScreenOffsetX; *x = scaled + SP->subScreenLeft;
         break;
     }
 }
@@ -252,14 +252,14 @@ void CalcScreenPlacement(float *x, float *y, float *w, float *h, int horzAlign, 
         break;
     case 0:
         scaled = SP->scaleVirtualToReal[0] * *x;
-        *x = scaled + SP->virtualScreenOffsetX + SP->subScreenLeft;
+        scaled = scaled + SP->virtualScreenOffsetX; *x = scaled + SP->subScreenLeft;
         *w = GetRealWidthFromVirtualWidth(*w);
         break;
     case 5:
         break;
     default:
         scaled = SP->scaleVirtualToReal[0] * *x;
-        *x = scaled + SP->virtualScreenOffsetX + SP->subScreenLeft;
+        scaled = scaled + SP->virtualScreenOffsetX; *x = scaled + SP->subScreenLeft;
         *w = GetRealWidthFromVirtualWidth(*w);
         break;
     }

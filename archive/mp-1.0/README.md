@@ -4,7 +4,7 @@ Rebuilds `CoD2MP_s.exe`, the Call of Duty 2 1.0 multiplayer client for Windows (
 [checksums.yml](checksums.yml)) from C/C++ source with the original compiler.
 
 **Status: checkpoint, not yet identical.** 1,698,959 of 1,699,840 section bytes sit at the
-same offset as retail (99.948%); 881 bytes still differ. The remaining differences are in a
+same offset as retail (99.961%); 669 bytes still differ. The remaining differences are in a
 handful of functions where the source shape is not yet found (register choices, instruction
 order, stack slots). This README is updated when the binary matches.
 

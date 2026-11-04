@@ -329,7 +329,10 @@ static void CG_OffsetFirstPersonView(void)
     cg->refdefViewAngles[1] += angles[1];
     cg->refdefViewAngles[2] += angles[2];
 
-    cg->refdef.vieworg[2] += cg->predictedPlayerState.viewHeightCurrent;
+    {
+        float *vo = cg->refdef.vieworg;
+        vo[2] += cg->predictedPlayerState.viewHeightCurrent;
+    }
 
     delta = BG_GetVerticalBobFactor(&cg->predictedPlayerState, cg->fBobCycle, cg->xyspeed, bg_bobMax->current.value);
     cg->refdef.vieworg[2] += delta;

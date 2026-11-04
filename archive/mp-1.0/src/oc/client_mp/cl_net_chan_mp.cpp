@@ -52,7 +52,7 @@ static void CL_Netchan_Encode(byte *data, int size)
 
     string = clc.serverCommands[clc.serverCommandSequence & 0x7f];
     index = 0;
-    key = (byte)clients[0].serverId ^ (byte)clc.challenge ^ (byte)clc.serverMessageSequence;
+    key = (byte)clc.challenge ^ (byte)clients[0].serverId ^ (byte)clc.serverMessageSequence;
 
     for (i = 0; i < size; i++, data++) {
         if (!string[index])
@@ -84,14 +84,14 @@ void CL_Netchan_Decode(byte *data, int size)
     string = ((clientConnection_t *)clc_base)->reliableCommands[reliableAcknowledge & 0x7f];
 
     index = 0;
-    key = (byte)(((clientConnection_t *)clc_base)->serverMessageSequence);
-    challenge = ((clientConnection_t *)clc_base)->challenge;
+    key = (byte)clc.challenge ^ (byte)clc.serverMessageSequence;
+    challenge = clc.challenge;
 #if defined(COD2_X64) || defined(_M_X64) || defined(__x86_64__)
     if (!challenge) {
         challenge = clc_x64_lastChallenge;
+        key = (byte)challenge ^ (byte)clc.serverMessageSequence;
     }
 #endif
-    key ^= (byte)challenge;
 
 #if defined(COD2_X64) || defined(_M_X64) || defined(__x86_64__)
     beforeTraceLen = size < (int)sizeof(beforeTrace) ? size : (int)sizeof(beforeTrace);

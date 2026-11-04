@@ -4337,7 +4337,7 @@ float BG_GetSpeed( const playerState_t *ps, int iTime )
 		return ps->velocity[2];
 	}
 
-	return sqrt(ps->velocity[0] * ps->velocity[0] + ps->velocity[1] * ps->velocity[1]);
+	return sqrt(ps->velocity[1] * ps->velocity[1] + ps->velocity[0] * ps->velocity[0]);
 }
 
 // rain - take a tracemask as well - we can't use anything out of pm
