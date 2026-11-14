@@ -12,3 +12,5 @@ binaries/**
 .vscode/
 .DS_Store
 core.*
+# Microsoft toolchain, never committed
+vc70/
