@@ -1,5 +1,5 @@
 #include "common_types.h"
-#include "PC/win32/gfx_dll_v60.h"
+#include "gfx_dll_v60.h"
 
 #if defined(COD2_GFX_DLL) && defined(COD2_GFX_DLL_RETAIL_V60)
 #    include <stdlib.h>

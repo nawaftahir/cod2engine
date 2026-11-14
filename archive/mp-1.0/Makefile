@@ -42,13 +42,15 @@ else
 
 TUS    := $(shell sed -e 's/\#.*//' src/tus.txt | awk 'NF{print $$1}')
 OBJS   := $(patsubst %,build/obj/%.obj,$(basename $(TUS)))
-tuflags = $(shell awk '$$1=="$(1)"{$$1="";print}' src/tus.txt)
+tuflags = $(shell awk '$$1=="$(1)"{sub(/\#.*/,"");$$1="";print}' src/tus.txt)
+# TUs marked "#oc" in tus.txt build with OCFLAGS (Mac decompile draft headers)
+OCTUS  := $(shell awk '/\#oc$$/{print $$1}' src/tus.txt)
 
 CL     := wine /opt/msvc710/Vc7/bin/cl.exe
 LINK   := wine /opt/msvc710/Vc7/bin/link.exe
 RC     := wine /opt/msvc710/Vc7/bin/rc.exe
 CFLAGS := /nologo /c /O2 /GL /MT /DNDEBUG /DWIN32 /FI.\\compat\\msvc71.h /I.\\compat\\include \
-	/I.\\universal /I. /I.\\qcommon /I.\\game /I.\\server /I.\\bgame /I.\\script /I.\\xanim \
+	/I.\\universal /I. /I.\\qcommon /I.\\game /I.\\server_mp /I.\\bgame /I.\\script /I.\\xanim \
 	/I.\\stringed /I.\\speex /I.\\speex\\speex
 # draft client layer from the Mac 1.3 decompile, on its own headers until ported
 OCFLAGS := /nologo /c /O2 /GL /MT /TP /DNDEBUG /FIstdint.h /FImsvc_c89.h \
@@ -70,7 +72,7 @@ deps = awk '/including file:/{sub(/.*including file: */,""); gsub(/\\/,"/"); if 
 
 build/obj/%.obj: src/%.cpp
 	@mkdir -p $(dir $@)
-	@cd src && $(CL) $(if $(filter oc/%,$*),$(OCFLAGS),$(CFLAGS)) $(call tuflags,$*.cpp) /showIncludes /Fo..\\$(call win,$@) .\\$(call win,$*.cpp) > ../$@.log 2>&1 || (grep -v including ../$@.log; false)
+	@cd src && $(CL) $(if $(filter $*.cpp,$(OCTUS)),$(OCFLAGS),$(CFLAGS)) $(call tuflags,$*.cpp) /showIncludes /Fo..\\$(call win,$@) .\\$(call win,$*.cpp) > ../$@.log 2>&1 || (grep -v including ../$@.log; false)
 	@$(deps)
 
 build/obj/%.obj: src/%.c
@@ -94,7 +96,8 @@ build/lib/mss_auto.obj: src/lib/mss_auto.c
 build/lib/mss32.lib: src/lib/mss32.def build/lib/mss_auto.obj src/lib/impname.pl
 	@wine vc70/lib.exe /nologo /machine:x86 /def:$(call win,$<) /out:build\\lib\\mss32_imp.lib > $@.log 2>&1 || (cat $@.log; false)
 	@perl src/lib/impname.pl build/lib/mss32_imp.lib 1 >> $@.log
-	@wine vc70/lib.exe /nologo /out:$(call win,$@) build\\lib\\mss32_imp.lib build\\lib\\mss_auto.obj >> $@.log 2>&1 || (cat $@.log; false)
+	@wine vc70/lib.exe /nologo /out:build\\lib\\mss32_1.lib build\\lib\\mss32_imp.lib build\\lib\\mss_auto.obj >> $@.log 2>&1 || (cat $@.log; false)
+	@wine vc70/lib.exe /nologo /out:$(call win,$@) build\\lib\\mss32_1.lib >> $@.log 2>&1 || (cat $@.log; false)
 
 # icon comes from the local retail exe (host step above); .rsrc is byte-identical to retail
 build/cod2mp.res: src/cod2mp.rc build/cod2mp.ico
@@ -110,7 +113,6 @@ $(REL): $(OBJS) $(IMPLIBS) build/cod2mp.res src/tus.txt Makefile
 	@printf '%s\n' $(call win,$(OBJS)) > build/objs.rsp
 	wineserver -k 2>/dev/null; export FAKETIME='2005-10-07 02:19:36' GUIDPIN=$(PDB_GUID) LD_PRELOAD="$(wildcard /usr/lib/*/faketime/libfaketime.so.1) $(CURDIR)/build/guidpin.so"; $(LINK) $(subst /FIXED:NO,/FIXED,$(subst build\\CoD2MP_s.map,build\\release\\CoD2MP_s.map,$(LFLAGS))) /DEBUG '/PDB:c:\builds\crc6_v1\pc\cod2\pc\CoD2MP_s.pdb' /OUT:$(call win,$@) @build\\objs.rsp build\\cod2mp.res $(LIBS) > build/release/link.log 2>&1 || { tail -10 build/release/link.log; exit 1; }
 	@! grep -E 'LNK2001|LNK2019|fatal error' build/release/link.log
-	@perl postlink.pl $@
 	@cp "$$(winepath -u 'c:\builds\crc6_v1\pc\cod2\pc\CoD2MP_s.pdb')" build/release/CoD2MP_s.pdb
 
 endif

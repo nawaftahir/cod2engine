@@ -3,7 +3,7 @@ CoD2MP_s.exe:
   platform: windows x86 (PE32, fixed image base 0x400000)
   compiler: Visual C++ .NET 2003 (cl 13.10.3077) /O2 /GL, link 7.10 /LTCG
   size: 1703936
-  sha256: 8caf434c9509020b9c94720d0407a31d61411312996dab9964f46865f070900e
+  sha256: 0bdee00f355e40ba85add028c2e6a6de6f5be3d2bbfeb6a5283427e4e2618c87
   sections:
     .text:  1409024   # @ 0x00401000
     .rdata: 200704    # @ 0x00559000

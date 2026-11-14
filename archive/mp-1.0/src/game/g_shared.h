@@ -1632,7 +1632,7 @@ int G_GetSavePersist();
 void G_SetSavePersist(int savepersist);
 void G_FreeAnimTreeInstances();
 
-#include "../server/server.h"
+#include "../server_mp/server.h"
 void G_BroadcastVoice(gentity_s *talker, VoicePacket_t *voicePacket);
 
 void G_PlayerStateToEntityStateExtrapolate( playerState_t *ps, entityState_t *s, int time, qboolean snap );

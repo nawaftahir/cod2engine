@@ -1,5 +1,5 @@
 #include "../qcommon/qcommon.h"
-#include "../server/server.h"
+#include "../server_mp/server.h"
 #include "g_shared.h"
 
 extern const game_client_field_t g_client_fields[];

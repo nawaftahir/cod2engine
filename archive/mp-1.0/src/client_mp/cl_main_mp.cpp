@@ -3281,7 +3281,7 @@ refexport_t *CL_LoadRendererDll(int apiVersion, refimport_t *ri_in)
 #endif
 
 #if defined(COD2_GFX_DLL) && defined(COD2_GFX_DLL_RETAIL_V60)
-#    include "PC/win32/gfx_dll_v60.h"
+#    include "../win32/gfx_dll_v60.h"
 #endif
 
 // Engine functions handed to the renderer through refimport_t.

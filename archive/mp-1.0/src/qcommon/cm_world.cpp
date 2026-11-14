@@ -1,6 +1,6 @@
 #include "qcommon.h"
 #include "cm_local.h"
-#include "../server/server.h"
+#include "../server_mp/server.h"
 
 #define SECTOR_HEAD 1
 

@@ -349,7 +349,7 @@ enum CriticalSection
 };
 
 #include "../game/g_shared.h"
-#include "../server/server.h"
+#include "../server_mp/server.h"
 #include "../qcommon/cm_local.h"
 
 extern va_info_t va_info[NUMTHREADS];

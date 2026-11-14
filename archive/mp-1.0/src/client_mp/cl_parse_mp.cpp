@@ -2,7 +2,7 @@
 #include "imports.h"
 #include "www_download.h"
 #include "cod2_feature_config.h"
-#include "PC/qcommon/net_hardening.h"
+#include "../qcommon/net_hardening.h"
 #include <stdlib.h>
 
 extern clientStatic_t cls;

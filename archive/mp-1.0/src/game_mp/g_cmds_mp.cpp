@@ -1,5 +1,5 @@
 #include "../qcommon/qcommon.h"
-#include "../server/server.h"
+#include "../server_mp/server.h"
 #include "g_shared.h"
 
 void ClientCommand( int clientNum );

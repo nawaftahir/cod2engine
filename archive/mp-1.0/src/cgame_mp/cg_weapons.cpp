@@ -796,7 +796,7 @@ void CalculateWeaponPosition_Sway(void)
     float ssSwayScale;
 
     weapDef = BG_GetWeaponDef(BG_GetViewmodelWeaponIndex(&cg->predictedPlayerState));
-    ssDT = cg->shellshock.duration - cg->time + cg->shellshock.startTime;
+    ssDT = cg->shellshock.startTime + cg->shellshock.duration - cg->time;
 
     if (ssDT > 0)
     {

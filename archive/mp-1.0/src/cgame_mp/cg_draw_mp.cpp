@@ -774,18 +774,46 @@ static void CG_DrawCenterString(void)
 }
 
 extern float DotProduct(const vec3_t a, const vec3_t b);
+#pragma optimize("p", on)
 static void __attribute_regparm__(2) CG_CalcCrosshairPosition(float *x, float *y)
 {
     vec3_t gunAng;
     vec3_t gunDir;
     float forward;
-    float horiz;
-    float vert;
 
     gunAng[0] = cg->gunPitch;
     gunAng[1] = cg->gunYaw;
     gunAng[2] = cg->refdefViewAngles[2];
-    AngleVectors(gunAng, gunDir, NULL, NULL);
+    {
+        const float *angles = gunAng;
+        float *dir = gunDir;
+        float *right = NULL;
+        float *up = NULL;
+        float angle;
+        float sr, sp, sy, cr, cp, cy;
+
+        angle = cg->gunYaw * (float)(3.14159265358979323846 * 2 / 360);
+        FastSinCos(angle, &sy, &cy);
+        angle = angles[0] * (float)(3.14159265358979323846 * 2 / 360);
+        FastSinCos(angle, &sp, &cp);
+        dir[0] = cp * cy;
+        dir[1] = cp * sy;
+        dir[2] = -sp;
+        if (right || up) {
+            angle = angles[2] * (float)(3.14159265358979323846 * 2 / 360);
+            FastSinCos(angle, &sr, &cr);
+            if (right) {
+                right[0] = -1 * sr * sp * cy + -1 * cr * -sy;
+                right[1] = -1 * sr * sp * sy + -1 * cr * cy;
+                right[2] = -1 * sr * cp;
+            }
+            if (up) {
+                up[0] = cr * sp * cy + -sr * -sy;
+                up[1] = cr * sp * sy + -sr * cy;
+                up[2] = cr * cp;
+            }
+        }
+    }
 
     forward = DotProduct(gunDir, cg->refdef.viewaxis[0]);
     if (forward <= 0.0f || cg->refdef.fov_x <= 0.0f || cg->refdef.fov_y <= 0.0f) {
@@ -794,11 +822,10 @@ static void __attribute_regparm__(2) CG_CalcCrosshairPosition(float *x, float *y
         return;
     }
 
-    horiz = DotProduct(gunDir, cg->refdef.viewaxis[1]);
-    *x = horiz / (forward * (float)tan((double)(cg->refdef.fov_x * 0.0087266462f))) * -320.0f;
-    vert = DotProduct(gunDir, cg->refdef.viewaxis[2]);
-    *y = vert / (forward * (float)tan((double)(cg->refdef.fov_y * 0.0087266462f))) * -240.0f;
+    *x = DotProduct(gunDir, cg->refdef.viewaxis[1]) / (forward * tan(cg->refdef.fov_x * 0.0087266462f)) * -320.0f;
+    *y = DotProduct(gunDir, cg->refdef.viewaxis[2]) / (forward * tan(cg->refdef.fov_y * 0.0087266462f)) * -240.0f;
 }
+#pragma optimize("", on)
 
 bool CG_GetWeapReticleZoom(float *pfZoom)
 {
@@ -909,7 +936,7 @@ static void CG_DrawAdsOverlay(const WeaponDef *weapDef, int weapIndex, const flo
         CG_DrawFrameOverlay(drawPos[0], drawPos[0] + drawSize[0] * 2.0f,
                             drawPos[1], drawPos[1] + drawSize[1] * 2.0f, color, material);
     } else {
-        drawPos[0] = (crosshairPos[0] - drawSize[0] * 0.5f);
+        drawPos[0] = crosshairPos[0] - (drawSize[0] * 0.5f);
         drawPos[1] = crosshairPos[1] - drawSize[1] * 0.5f;
         CL_DrawStretchPic(drawPos[0], drawPos[1], drawSize[0], drawSize[1], horzAlign, vertAlign,
                           0.0f, 0.0f, 1.0f, 1.0f, color, material);

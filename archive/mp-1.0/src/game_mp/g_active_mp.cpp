@@ -1,7 +1,7 @@
 #define SCE_CONST const
 #include "../qcommon/qcommon.h"
 #include "g_shared.h"
-#include "../server/server.h"
+#include "../server_mp/server.h"
 
 
 
