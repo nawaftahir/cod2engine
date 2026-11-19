@@ -1152,9 +1152,13 @@ static void FX_AddFxToScene( Effect *effect, int reType )
 	VectorCopy( effect->mRefEnt.endpos, ent.endpos );
 	if ( effect->mFlags & 1 )
 		ent.renderFxFlags |= 8;
+	XModel *model = NULL;
 	if ( effect->mFlags & 0x4000000 )
 		ent.renderFxFlags |= 0x80;
-	theFxHelper->AddFxToScene( &ent, effect->mModel );
+	// always true; keeps the model in a register across blocks like retail
+	if ( !model )
+		model = effect->mModel;
+	theFxHelper->AddFxToScene( &ent, model );
 }
 
 Particle::Particle()

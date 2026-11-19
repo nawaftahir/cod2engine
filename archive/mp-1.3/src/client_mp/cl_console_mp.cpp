@@ -716,7 +716,7 @@ static int CL_ConsolePrint_AddLine(print_msg_type_t type, const char *txt, int d
         FontHandle font;
         int curWidth;
         int charWidth;
-        unsigned int letter;
+        int letter;
 
         if (type == PMSG_SUBTITLE)
             charHeight = (float)cg_subtitleCharHeight->current.integer;
@@ -746,10 +746,10 @@ static int CL_ConsolePrint_AddLine(print_msg_type_t type, const char *txt, int d
                     charWidth = re.TextWidth(s, 1, font);
 
                     letter = SEH_ReadCharFromString(&s, NULL);
-                    if ((int)letter <= ' ')
+                    if (letter <= ' ')
                         break;
-                    w += charWidth;
                     off++;
+                    w += charWidth;
                     if (off > con.linewidth || (float)w * normScale > (float)linewidth * 6.5f) {
                         Con_Linefeed(type, duration);
                         lineBroken = 1;
@@ -777,14 +777,14 @@ static int CL_ConsolePrint_AddLine(print_msg_type_t type, const char *txt, int d
                 if (!con.lineOffset && letter == ' ' && lineBroken)
                     break;
                 line = con.currentLine % con.totallines;
-                if (letter > 0xff) {
+                if ((unsigned int)letter > 0xff) {
                     if (con.lineOffset + 1 >= con.linewidth) {
                         Con_Linefeed(type, duration);
                         line = con.currentLine % con.totallines;
                         lineBroken = 1;
                         curWidth = 0;
                     }
-                    con.textBuffer[line * con.linewidth + con.lineOffset] = (short)((color << 8) | (letter >> 8));
+                    con.textBuffer[line * con.linewidth + con.lineOffset] = (short)((color << 8) | ((unsigned int)letter >> 8));
                     con.lineOffset++;
                     letter &= 0xff;
                 }

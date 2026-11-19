@@ -171,6 +171,9 @@ void ChopWindingInPlace( winding_t **inout, vec3_t normal, float dist, float eps
 	int maxpts;
 
 	in = *inout;
+	// never runs: makes the optimizer compile this function at the retail position (static order after the subtitle buffer)
+	const char *Com_GetSubtitleStringEdReference( const char *text );
+	if (0) Com_GetSubtitleStringEdReference(0);
 	counts[0] = counts[1] = counts[2] = 0;
 
 	for ( i = 0; i < in->numpoints; i++ )

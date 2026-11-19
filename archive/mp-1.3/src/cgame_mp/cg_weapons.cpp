@@ -226,14 +226,15 @@ static void StartWeaponAnim(int weaponNum, struct XAnimTree_s *tree, int activeA
 static void StartWeaponAnim(int weaponNum, struct XAnimTree_s *tree, int activeAnim)
 {
     int i;
+    int anim;
     weaponInfo_t *weapInfo;
 
     weapInfo = &cg_weaponsArray[weaponNum];
-    for (i = 0; i < 20; i++) {
-        if (activeAnim == i + 1)
-            XAnimSetGoalWeight(tree, i + 1, 1.0f, 0.0f, weapInfo->viewModelAnimRates[i + 1], 0, 1, 1);
+    for (i = 0, anim = 1; i < 20; i++, anim++) {
+        if (activeAnim == anim)
+            XAnimSetGoalWeight(tree, anim, 1.0f, 0.0f, weapInfo->viewModelAnimRates[anim], 0, 1, 1);
         else
-            XAnimSetGoalWeight(tree, i + 1, 0.0f, 0.0f, weapInfo->viewModelAnimRates[i + 1], 0, 0, 0);
+            XAnimSetGoalWeight(tree, anim, 0.0f, 0.0f, weapInfo->viewModelAnimRates[anim], 0, 0, 0);
     }
 }
 static void CG_PlayADSAnim(int animIndex, XAnimTree *pAnimTree)
@@ -1796,15 +1797,16 @@ void CG_FireWeapon(centity_t *cent, int event, int barrel)
     struct DObj_s *obj;
 
     ent = &cent->nextState;
-    if (!cent->nextState.weapon)
+    if (!ent->weapon)
         return;
 
-    if (cent->nextState.weapon > BG_GetNumWeapons()) {
+    if (ent->weapon > BG_GetNumWeapons()) {
         Com_Error(ERR_DROP, "\x15"
                      "CG_FireWeapon: ent->weapon > BG_GetNumWeapons()");
         return;
     }
 
+    ent = &cent->nextState; // retail reloads ent->weapon below
     weapInfo = &cg_weaponsArray[ent->weapon];
     cent->bMuzzleFlash = 1;
 

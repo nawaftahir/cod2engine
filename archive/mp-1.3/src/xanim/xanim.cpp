@@ -1704,7 +1704,11 @@ void XAnimCalc(const DObj_s *obj, unsigned int entry, float weightScale, DObjAni
 
 		if ( !obj->animToModel[entry] )
 		{
-			modelCounters[entry + 1] = *modelCounters;
+			byte counter = 0;
+			// always true; keeps the counter in a register across blocks like retail
+			if ( !counter )
+				counter = *modelCounters;
+			modelCounters[entry + 1] = counter;
 		}
 		else
 		{
@@ -1712,7 +1716,8 @@ void XAnimCalc(const DObj_s *obj, unsigned int entry, float weightScale, DObjAni
 				goto modelSet;
 
 			modelCounters[entry + 1] = *modelCounters;
-			SL_RemoveRefToStringOfLen(obj->animToModel[entry], animEntry->u.parts->boneCount + 16);
+			unsigned int modelName = obj->animToModel[entry];
+			SL_RemoveRefToStringOfLen(modelName, animEntry->u.parts->boneCount + 16);
 		}
 
 		obj->animToModel[entry] = XAnimSetModel(animEntry, obj->models, obj->numModels);

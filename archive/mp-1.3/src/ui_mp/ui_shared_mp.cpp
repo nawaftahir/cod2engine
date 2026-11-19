@@ -414,11 +414,17 @@ void Window_Paint(displayContextDef_t *dc, float (*w_param)[4][32], float fadeAm
     if (!w->style && !w->border)
         return;
 
-    if (w->border) {
+    int border = 0;
+    // always true; keeps border in a register across blocks like retail
+    if (!border)
+        border = w->border;
+    if (border) {
+        float bs1;
         fillRect.x += w->borderSize;
         fillRect.y += w->borderSize;
-        fillRect.w -= w->borderSize + 1.0f;
-        fillRect.h -= w->borderSize + 1.0f;
+        bs1 = w->borderSize + 1.0f;
+        fillRect.w -= bs1;
+        fillRect.h -= bs1;
     }
 
     switch (w->style) {
@@ -1561,17 +1567,18 @@ int Item_ListBox_OverLB(itemDef_t *item, float x, float y)
 void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y)
 {
     rectDef_t r;
+    int localClientNum = 0;
     listBoxDef_s *listPtr;
 
     listPtr = Item_GetListBoxDef(item);
     if (!listPtr)
         return;
     Window_RemoveDynamicFlags(&item->window, 0x1f00);
-    item->window.dynamicFlags[0] |= Item_ListBox_OverLB(item, x, y);
+    item->window.dynamicFlags[localClientNum] |= Item_ListBox_OverLB(item, x, y);
     r.horzAlign = item->window.rect[0].horzAlign;
     r.vertAlign = item->window.rect[0].vertAlign;
     if (Window_IsHorizontal(&item->window)) {
-        if (!(item->window.dynamicFlags[0] & 0x1f00)) {
+        if (!(item->window.dynamicFlags[localClientNum] & 0x1f00)) {
             if (listPtr->elementStyle == 1) {
                 r.x = item->window.rect[0].x;
                 r.y = item->window.rect[0].y;
@@ -1584,7 +1591,7 @@ void Item_ListBox_MouseEnter(itemDef_t *item, float x, float y)
                 }
             }
         }
-    } else if (!(item->window.dynamicFlags[0] & 0x1f00)) {
+    } else if (!(item->window.dynamicFlags[localClientNum] & 0x1f00)) {
         r.x = item->window.rect[0].x;
         r.y = item->window.rect[0].y;
         r.w = item->window.rect[0].w - 16.0f;
@@ -2548,8 +2555,7 @@ itemDef_t *Menu_SetNextCursorItem(displayContextDef_t *dc, menuDef_t *menu)
             wrapped = 1;
             menu->cursorItem[0] = 0;
         }
-        item = menu->items[menu->cursorItem[0]];
-        if (Item_SetFocus(dc, item, (float)dc->cursorx, (float)dc->cursory)) {
+        if (Item_SetFocus(dc, menu->items[Menu_Getter_5338b0(menu)], (float)dc->cursorx, (float)dc->cursory)) {
             item = menu->items[menu->cursorItem[0]];
             Menu_HandleMouseMove(dc, menu, item->window.rect[0].x + 1.0f, item->window.rect[0].y + 1.0f);
             return menu->items[menu->cursorItem[0]];

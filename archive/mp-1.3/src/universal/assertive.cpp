@@ -3,7 +3,7 @@
 static int cl_decode_count = 0;
 static bool shouldQuitOnError = false;
 
-static HWND g_hwndGame[4];
+static ALIGNED(8) HWND g_hwndGame[4];
 static unsigned int g_hiddenCount;
 
 void FixWindowsDesktop();

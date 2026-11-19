@@ -1465,18 +1465,18 @@ static void CG_DrawCursorhint(const rectDef_t *rect, struct Font_s *font, float 
     {
         textWidth = (float)UI_TextWidth(text, 0, font, fontscale);
         textHeight = (float)UI_TextHeight(font, fontscale);
-        x = (widthScale * rect->w + textWidth + scale) * -0.5f;
+        x = (((widthScale * rect->w)) + textWidth + scale) * -0.5f;
         y = rect->y - rect->h * 0.5f;
         UI_DrawText(text, 0x7fffffff, font, x, textHeight * 0.5f + rect->y,
                     rect->horzAlign, rect->vertAlign, fontscale, fadeColor, textStyle);
-        UI_DrawHandlePic(x + textWidth, y, widthScale * rect->w + scale, rect->h + scale, rect->horzAlign,
+        UI_DrawHandlePic(x + textWidth, y, widthScale * rect->w + scale, (float)(((((double)rect->h)) + ((double)scale))), rect->horzAlign,
                          rect->vertAlign, fadeColor, hintIcon);
         return;
     }
 
 draw_icon:
     UI_DrawHandlePic(rect->x - (halfscale + rect->w + widthOfs) * 0.5f, rect->y - halfscale, widthScale * rect->w + scale,
-                     rect->h + scale, rect->horzAlign, rect->vertAlign, fadeColor, hintIcon);
+                     (float)((double)rect->h + scale), rect->horzAlign, rect->vertAlign, fadeColor, hintIcon);
 }
 
 void CG_DrawHoldBreathHint(const rectDef_t *rect, struct Font_s *font, float fontscale, int textStyle)

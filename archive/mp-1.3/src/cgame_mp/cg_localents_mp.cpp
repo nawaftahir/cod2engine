@@ -1,5 +1,3 @@
-#pragma section(".CRT$XCU", read, write)
-#pragma section(".CRT$XCA", read, write)
 #include "common_types.h"
 #include "imports.h"
 #include "headers/PC/cgame_mp/cg_local.h"

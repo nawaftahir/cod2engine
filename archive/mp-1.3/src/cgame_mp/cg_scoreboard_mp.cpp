@@ -324,8 +324,8 @@ float CG_DrawScoreboard_Objective(const float *color, float y)
                 else
                     textStart += 2;
                 y += CG_ScoreboardGetter_4d2bc0();
-                whiteSpace = NULL;
                 textEnd = textStart;
+                whiteSpace = NULL;
                 continue;
             }
             else

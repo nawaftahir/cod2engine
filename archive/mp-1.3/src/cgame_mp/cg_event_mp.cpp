@@ -1,4 +1,4 @@
-// first declaration fixes the LTCG walk order
+// declared first so the optimizer compiles these functions in retail order
 void CG_BulletHitEvent(int sourceEntityNum, float *position, float *normal, float *reflected, int surfType, int event);
 #include "common_types.h"
 #include "imports.h"

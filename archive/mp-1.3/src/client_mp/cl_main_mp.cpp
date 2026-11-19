@@ -894,6 +894,9 @@ void CL_DemoCompleted(void)
     }
 
     CL_Disconnect();
+    // never runs: makes the optimizer compile this function at the retail position (1000.0 pool order)
+    void Com_StartupConfigs();
+    if (0) Com_StartupConfigs();
     CL_NextDemo();
 }
 

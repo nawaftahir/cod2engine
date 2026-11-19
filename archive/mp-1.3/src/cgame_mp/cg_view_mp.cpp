@@ -1,4 +1,4 @@
-// first declaration fixes the LTCG walk order
+// declared first so the optimizer compiles these functions in retail order
 void CG_ProcessSnapshots();
 #include "cod2_feature_config.h"
 #include "common_types.h"

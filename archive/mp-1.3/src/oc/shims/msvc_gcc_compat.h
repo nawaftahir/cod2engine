@@ -60,11 +60,9 @@ extern "C" {
 #endif
 void *_ReturnAddress(void);
 void  __debugbreak(void);
-unsigned char _BitScanReverse(unsigned long *, unsigned long);
 #ifdef __cplusplus
 }
 #endif
-#pragma intrinsic(_ReturnAddress, _BitScanReverse)
 
 #ifndef __builtin_expect
 #define __builtin_expect(expr, c)  (expr)
@@ -87,8 +85,6 @@ unsigned char _BitScanReverse(unsigned long *, unsigned long);
 #define __builtin_return_address(lvl)  _ReturnAddress()   /* lvl>0 unsupported */
 #define __builtin_debugtrap()     __debugbreak()
 #define __builtin_prefetch(a,b,c) ((void)0)
-static __inline int __cod2_clz(unsigned x) { unsigned long i; return _BitScanReverse(&i, x) ? (int)(31 - i) : 32; }
-#define __builtin_clz(x)          __cod2_clz(x)
 
 /* va_list builtins -> <stdarg.h> spellings. */
 #include <stdarg.h>
@@ -124,7 +120,9 @@ long _InterlockedCompareExchange(long volatile *, long, long);
  * no-ops). COD2_CONSTRUCTOR(fn){..} registers fn in the CRT's .CRT$XCU init
  * array so it runs before main, as the GCC constructor would.
  *   usage: COD2_CONSTRUCTOR(init_rune_locale) { ... }   (replaces the attribute) */
+#ifndef COD2_NO_XCU_DECL   /* a TU whose own dynamic init must stay compiler-placed */
 #pragma section(".CRT$XCU", read)   /* declare the CRT init array section once */
+#endif
 #define COD2_CONSTRUCTOR(fn)                                                 \
     static void fn(void);                                                   \
     __declspec(allocate(".CRT$XCU")) static void (*fn##__crtreg)(void) = fn;\

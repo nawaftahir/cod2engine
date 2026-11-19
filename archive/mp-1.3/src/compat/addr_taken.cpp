@@ -1,4 +1,4 @@
-// Stand-in for client code that passes these by pointer (renderer imports, callbacks)
+// Takes the address of these like client code does (renderer imports, callbacks)
 #include "../qcommon/qcommon.h"
 #include "../server_mp/server.h"
 #include "../bgame/bg_public.h"
