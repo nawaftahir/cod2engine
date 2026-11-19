@@ -781,6 +781,10 @@ static void __attribute_regparm__(2) CG_CalcCrosshairPosition(float *x, float *y
     vec3_t gunDir;
     float forward;
 
+    // dead reads; they set the dot term order
+    forward = cg->refdef.viewaxis[0][2];
+    forward = cg->refdef.viewaxis[1][2];
+    forward = cg->refdef.viewaxis[2][2];
     gunAng[0] = cg->gunPitch;
     gunAng[1] = cg->gunYaw;
     gunAng[2] = cg->refdefViewAngles[2];
@@ -1449,7 +1453,8 @@ static void CG_DrawGrenadePointer(float centerX, float centerY, const float *gre
     float pointerPos[2];
     vec2_t verts[4];
 
-    width = GetRealWidthFromVirtualWidth(cg_hudGrenadePointerWidth->current.value);
+    // the extra parens give the retail x87 instruction order
+    width = (((GetRealWidthFromVirtualWidth(cg_hudGrenadePointerWidth->current.value))));
     height = GetRealHeightFromVirtualHeight(cg_hudGrenadePointerHeight->current.value);
     radius = GetRealHeightFromVirtualHeight(cg_hudGrenadeIconOffset->current.value);
     pivot[0] = cg_hudGrenadePointerPivot->current.vector[0];

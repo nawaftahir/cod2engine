@@ -1888,7 +1888,6 @@ void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origi
 	float cosPitch;
 	float len;
 	float width;
-	float scale;
 	vec3_t dir;
 	vec3_t point;
 	vec3_t up = { 0.0f, 0.0f, 1.0f };
@@ -1909,8 +1908,8 @@ void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origi
 		pitch = flrand(0.0f, 180.0f) * 0.017453292f;
 		FastSinCos(pitch, &sinPitch, &cosPitch);
 		radius = primTemp->mRadius.GetVal();
-		height = primTemp->mHeight.GetVal();
-		scale = radius * sinPitch; VectorSet(dir, scale * sinYaw, scale * cosYaw, height * cosPitch);
+		float bh = primTemp->mHeight.GetVal();
+		VectorSet(dir, radius * sinPitch * sinYaw, radius * sinPitch * cosYaw, bh * cosPitch);
 		VectorAdd(pos, dir, pos);
 		if ( primTemp->mSpawnFlags & 2 )
 		{
@@ -1924,10 +1923,11 @@ void FX_CalcOriginAndAxis( EffectPrimitive *prim, vec3_t out, const vec3_t origi
 	}
 	else if ( primTemp->mSpawnFlags & 4 )
 	{
-		height = flrand(-0.5f, 0.5f) * primTemp->mHeight.GetVal();
-		width = primTemp->mRadius.GetVal();
-		VectorScale(axis[1], width, point);
-		VectorMA(point, height, axis[0], point);
+		float hw[2];
+		hw[0] = flrand(-0.5f, 0.5f) * primTemp->mHeight.GetVal();
+		hw[1] = primTemp->mRadius.GetVal();
+		VectorScale(axis[1], hw[1], point);
+		VectorMA(point, hw[0], axis[0], point);
 		RotatePointAroundVector(dir, axis[0], point, flrand(0.0f, 360.0f));
 		VectorAdd(pos, dir, pos);
 		if ( primTemp->mSpawnFlags & 2 )

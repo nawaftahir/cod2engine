@@ -675,7 +675,7 @@ void SV_DirectConnect( netadr_t from )
 	guid = 0;
 
 	// see if the challenge is valid (local clients don't need to challenge)
-	if ( from.type != NA_LOOPBACK && from.type != NA_BOT )
+	if ( !NET_IsLocalAddress( from ) )
 	{
 		for ( i = 0 ; i < MAX_CHALLENGES ; i++ )
 		{

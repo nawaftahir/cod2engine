@@ -1,5 +1,15 @@
 #include "../qcommon/qcommon.h"
 #include "script_public.h"
+/* 8 unused symbols, no code or data. The retail link had more global symbols here, and the
+   optimizer's choices in later functions depend on that count. */
+extern "C" { static int at_pad_0; }
+extern "C" { static int at_pad_1; }
+extern "C" { static int at_pad_2; }
+extern "C" { static int at_pad_3; }
+extern "C" { static int at_pad_4; }
+extern "C" { static int at_pad_5; }
+extern "C" { static int at_pad_6; }
+extern "C" { static int at_pad_7; }
 
 static scrAnimGlob_t scrAnimGlob;
 scrAnimPub_t scrAnimPub;

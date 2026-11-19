@@ -1,4 +1,4 @@
-// Draft layer: storage for globals the opencod2 files only declare.
+// Storage for globals that the oc/ files only declare.
 #include "common_types.h"
 #include "imports.h"
 

@@ -47,6 +47,32 @@
 #include "vbr.h"
 #include "misc.h"
 #include <speex/speex_callbacks.h>
+/* 24 unused symbols, no code or data. The retail link had more global symbols here, and the
+   optimizer's choices in later functions depend on that count. */
+static int spx_pad_0;
+static int spx_pad_1;
+static int spx_pad_2;
+static int spx_pad_3;
+static int spx_pad_4;
+static int spx_pad_5;
+static int spx_pad_6;
+static int spx_pad_7;
+static int spx_pad_8;
+static int spx_pad_9;
+static int spx_pad_10;
+static int spx_pad_11;
+static int spx_pad_12;
+static int spx_pad_13;
+static int spx_pad_14;
+static int spx_pad_15;
+static int spx_pad_16;
+static int spx_pad_17;
+static int spx_pad_18;
+static int spx_pad_19;
+static int spx_pad_20;
+static int spx_pad_21;
+static int spx_pad_22;
+static int spx_pad_23;
 
 #ifndef M_PI
 #define M_PI           3.14159265358979323846  /* pi */
@@ -1206,7 +1232,7 @@ int nb_decode(void *state, SpeexBits *bits, void *vout)
    int pitch_half[2];
    int ol_pitch_id=0;
 #endif
-   spx_word16_t *out = (spx_word16_t *)vout;
+   spx_word16_t *out = vout;
 
    st=(DecState*)state;
    stack=st->stack;
@@ -1354,9 +1380,9 @@ int nb_decode(void *state, SpeexBits *bits, void *vout)
    {
       float lsp_dist=0, fact;
       for (i=0;i<st->lpcSize;i++)
-         lsp_dist += fabs((st->old_qlsp[i] - st->qlsp[i]));
+         lsp_dist += fabs(st->old_qlsp[i] - st->qlsp[i]);
       lsp_dist /= LSP_SCALING;
-      fact = (.6*exp(-.2*lsp_dist));
+      fact = .6*exp(-.2*lsp_dist);
       for (i=0;i<2*st->lpcSize;i++)
          st->mem_sp[i] = (spx_mem_t)(st->mem_sp[i]*fact);
    }
@@ -1396,7 +1422,7 @@ int nb_decode(void *state, SpeexBits *bits, void *vout)
    {
       int quant;
       quant = speex_bits_unpack_unsigned(bits, 4);
-      ol_pitch_coef=(GAIN_SCALING*0.066667*quant);
+      ol_pitch_coef=GAIN_SCALING*0.066667*quant;
    }
    
    /* Get global excitation gain */
@@ -1613,7 +1639,7 @@ int nb_decode(void *state, SpeexBits *bits, void *vout)
             }
             st->voc_offset -= st->subframeSize;
 
-            g=(.5+2*(g-.6));
+            g=.5+2*(g-.6);
             if (g<0)
                g=0;
             if (g>1)

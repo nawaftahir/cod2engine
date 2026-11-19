@@ -1,20 +1,20 @@
-# mp-1.0 — Call of Duty 2 multiplayer client 1.0, Windows (in progress)
+# mp-1.0 — Call of Duty 2 multiplayer client 1.0, Windows
 
 Rebuilds `CoD2MP_s.exe`, the Call of Duty 2 1.0 multiplayer client for Windows (1,703,936 bytes, SHA-256 `0bdee00f…8c87`, see
 [checksums.yml](checksums.yml)) from C/C++ source with the original compiler.
 
-**Status: checkpoint, not yet identical.** 1,699,582 of 1,699,840 section bytes sit at the
-same offset as retail (99.985%); 258 bytes still differ. The PE header is identical. The remaining differences are in a
-handful of functions where the source shape is not yet found (register choices, instruction
-order, stack slots). This README is updated when the binary matches.
+**Status: identical.** `make check` rebuilds the exe byte for byte: SHA-256 equals retail and all
+1,699,840 section bytes and the PE header match. A few places (about a dozen, each commented) use a spelling chosen only to make the compiler
+produce the retail code: a call that never runs, an always-true test, extra parentheses, or unused
+symbols. They add no code; the original spelling there is not known yet. The source list (link order) and per-file flags live in
+the `Makefile`; after editing flags, run `make clean` first (objects do not depend on them).
 
 ## Source
 
 | Path | Contents |
 |---|---|
 | `src/` | The complete source: every file the build compiles or includes |
-| `src/tus.txt` | Translation units in link order, with per-file compiler flags |
-| `src/unknown/` | Objects whose original source files are unknown (empty `/GL` objects the Rich header counts) |
+| `src/unknown/` | Objects whose original source files are unknown (empty objects standing in for files the retail link contains) |
 | `tools/` | `shameter.py` (same-offset meter), `rsrc.py` (copies the icon resource from your exe) |
 | `guidpin.c` | `LD_PRELOAD` shim: gives the linker's `UuidCreate` the retail PDB GUID |
 

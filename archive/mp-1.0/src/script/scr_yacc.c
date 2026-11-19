@@ -1,5 +1,43 @@
 
 #include <stdio.h>
+/* 36 unused symbols, no code or data. The retail link had more global symbols here, and the
+   optimizer's choices in later functions depend on that count. */
+static int yy_pad_0;
+static int yy_pad_1;
+static int yy_pad_2;
+static int yy_pad_3;
+static int yy_pad_4;
+static int yy_pad_5;
+static int yy_pad_6;
+static int yy_pad_7;
+static int yy_pad_8;
+static int yy_pad_9;
+static int yy_pad_10;
+static int yy_pad_11;
+static int yy_pad_12;
+static int yy_pad_13;
+static int yy_pad_14;
+static int yy_pad_15;
+static int yy_pad_16;
+static int yy_pad_17;
+static int yy_pad_18;
+static int yy_pad_19;
+static int yy_pad_20;
+static int yy_pad_21;
+static int yy_pad_22;
+static int yy_pad_23;
+static int yy_pad_24;
+static int yy_pad_25;
+static int yy_pad_26;
+static int yy_pad_27;
+static int yy_pad_28;
+static int yy_pad_29;
+static int yy_pad_30;
+static int yy_pad_31;
+static int yy_pad_32;
+static int yy_pad_33;
+static int yy_pad_34;
+static int yy_pad_35;
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

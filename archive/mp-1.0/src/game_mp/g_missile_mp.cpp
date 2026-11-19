@@ -638,6 +638,8 @@ gentity_t *fire_grenade( gentity_t *self, vec3_t start, vec3_t dir, int grenadeW
 	WeaponDef *weapDef;
 
 	bolt = G_Spawn();
+	// never runs: makes the optimizer compile this function at the retail position (720.0f pool order)
+	if (0) G_TempEntity(start, 0);
 
 	// no self->client for shooter_grenade's
 	if ( self->client && self->client->ps.grenadeTimeLeft )

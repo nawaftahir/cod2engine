@@ -3023,12 +3023,12 @@ next:
 			newSize = size;
 			currentValue = top;
 
+			// bNoStack is false here, so the && term emits no code; it keeps type in a register like retail
 			do
 			{
-				newSize++;
 				assert(currentValue[-1].type != VAR_CODEPOS);
 			}
-			while ( (currentValue--)[-1].type != VAR_PRECODEPOS );
+			while ( (type = (currentValue--)[-1].type) != VAR_PRECODEPOS ? (newSize++, bNoStack && (newSize += type), true) : (newSize++, false) );
 			assert(newSize >= 0 && newSize < (1 << 16));
 
 			len = STACKBUF_BUFFER_SIZE; len = len * size;

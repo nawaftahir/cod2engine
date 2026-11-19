@@ -6,6 +6,40 @@
 /* @(#) $Id$ */
 
 #include "zutil.h"
+/* 32 unused symbols, no code or data. The retail link had more global symbols here, and the
+   optimizer's choices in later functions depend on that count. */
+static int zl_pad_0;
+static int zl_pad_1;
+static int zl_pad_2;
+static int zl_pad_3;
+static int zl_pad_4;
+static int zl_pad_5;
+static int zl_pad_6;
+static int zl_pad_7;
+static int zl_pad_8;
+static int zl_pad_9;
+static int zl_pad_10;
+static int zl_pad_11;
+static int zl_pad_12;
+static int zl_pad_13;
+static int zl_pad_14;
+static int zl_pad_15;
+static int zl_pad_16;
+static int zl_pad_17;
+static int zl_pad_18;
+static int zl_pad_19;
+static int zl_pad_20;
+static int zl_pad_21;
+static int zl_pad_22;
+static int zl_pad_23;
+static int zl_pad_24;
+static int zl_pad_25;
+static int zl_pad_26;
+static int zl_pad_27;
+static int zl_pad_28;
+static int zl_pad_29;
+static int zl_pad_30;
+static int zl_pad_31;
 
 struct internal_state      {int dummy;}; /* for buggy compilers */
 

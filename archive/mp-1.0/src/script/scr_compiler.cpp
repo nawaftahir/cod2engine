@@ -3057,6 +3057,7 @@ EvalPrimitiveExpression
 bool EvalPrimitiveExpression( sval_u expr, VariableCompileValue *constValue )
 {
 	float value;
+	sval_u sourcePos;
 
 	switch ( expr.node[0].type )
 	{
@@ -3068,6 +3069,7 @@ bool EvalPrimitiveExpression( sval_u expr, VariableCompileValue *constValue )
 		return true;
 
 	case ENUM_float:
+		sourcePos = expr.node[2];
 		value = expr.node[1].floatValue;
 		goto evalFloat;
 
@@ -3076,10 +3078,11 @@ bool EvalPrimitiveExpression( sval_u expr, VariableCompileValue *constValue )
 		return true;
 
 	case ENUM_minus_float:
+		sourcePos = expr.node[2];
 		value = -expr.node[1].floatValue;
 
 evalFloat:
-		EvalFloat( value, expr.node[2], constValue );
+		EvalFloat( value, sourcePos, constValue );
 		return true;
 
 	case ENUM_string:

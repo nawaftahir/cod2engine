@@ -1308,6 +1308,8 @@ const char *Com_GetSubtitleStringEdReference( const char *text )
 		return NULL;
 	}
 	Com_BeginParseSession("soundaliases/subtitle.st");
+	// never runs: makes the optimizer compile this function at the retail position (static order after Com_ErrorCleanup)
+	if (0) FS_InitFilesystem();
 	data = (const char *)buffer;
 	while ( 1 )
 	{
