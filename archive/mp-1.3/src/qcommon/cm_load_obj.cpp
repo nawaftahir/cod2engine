@@ -1562,7 +1562,7 @@ int CM_LoadLumpFromFile( int lump, byte **data )
 		return 0;
 	}
 
-	FS_SeekInternal(h, header[2 * lump + 3] - BSP_HEADER_SIZE, 0);
+	FS_Seek(h, header[2 * lump + 3] - BSP_HEADER_SIZE, 0);
 	cm_lumpData_67 = (byte *)Hunk_AllocateTempMemory(len);
 	FS_Read(cm_lumpData_67, len, h);
 	FS_FCloseFile(h);
@@ -1571,8 +1571,8 @@ int CM_LoadLumpFromFile( int lump, byte **data )
 	return len;
 }
 
-// unreferenced; original name unknown
-void CM_FreeLumpData( void )
+// Unreferenced. Name from the Mac demo symbols.
+void CM_FreeLump( void )
 {
 	Hunk_FreeTempMemory(cm_lumpData_67);
 }

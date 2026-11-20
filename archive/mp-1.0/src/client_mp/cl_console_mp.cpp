@@ -30,7 +30,7 @@ extern float floorf(float x);
 
 
 // unreferenced com_math.h helper copies retail keeps in this file (names unknown, retail addresses)
-void CL_VectorScale4_403660(const vec4_t v, const float s, vec4_t o)
+void Vec4Scale(const vec4_t v, const float s, vec4_t o)
 {
     o[0] = s * v[0];
     o[1] = s * v[1];
@@ -309,19 +309,19 @@ toggle:
 }
 
 // retail 0x4038a0/0x4038b0/0x4038d0, unreferenced; names unknown
-void Con_Open_4038a0(void)
+void Con_OpenConsole(void)
 {
     if (!(clients[0].keyCatchers & 1))
         Con_ToggleConsole_f();
 }
 
-void Con_ShowOutput_4038b0(void)
+void Con_OpenConsoleOutput(void)
 {
     if (clients[0].keyCatchers & 1)
         con.outputVisible = 1;
 }
 
-void Con_Hide_4038d0(void)
+void Con_CloseConsole(void)
 {
     if (clients[0].keyCatchers & 1)
         Con_ToggleConsole_f();
@@ -983,7 +983,7 @@ static void ConDrawInput_Text(const char *str, const vec_t *color)
     re.DrawText(str, 0x7fffffff, cls.consoleFont, conDrawInputGlob.x, conDrawInputGlob.y + conDrawInputGlob.fontHeight, 1.0f, 1.0f, color, 0);
 }
 
-static void ConDrawInput_DrawText(const char *text, int maxChars, const vec_t *color)
+static void ConDrawInput_TextLimitChars(const char *text, int maxChars, const vec_t *color)
 {
     FontHandle font = cls.consoleFont;
 
@@ -1167,21 +1167,21 @@ static void ConDrawInput_DetailedDvarMatch(const char *str)
     hasLatchedValue = Dvar_HasLatchedValue(dvar);
     lineCount = hasLatchedValue ? 3 : 2;
     ConDrawInput_Box(lineCount, con_inputHintBoxColor->current.vector);
-    ConDrawInput_DrawText(str, 24, con_inputDvarMatchColor);
+    ConDrawInput_TextLimitChars(str, 24, con_inputDvarMatchColor);
     conDrawInputGlob.x += 200.0f;
-    ConDrawInput_DrawText(Dvar_DisplayableValue(dvar), 40, con_inputDvarValueColor);
+    ConDrawInput_TextLimitChars(Dvar_DisplayableValue(dvar), 40, con_inputDvarValueColor);
     conDrawInputGlob.y = conDrawInputGlob.y + conDrawInputGlob.fontHeight;
     conDrawInputGlob.x = conDrawInputGlob.leftX;
     if (hasLatchedValue) {
         ConDrawInput_Text("  latched value", con_inputDvarInactiveValueColor);
         conDrawInputGlob.x += 200.0f;
-        ConDrawInput_DrawText(Dvar_DisplayableLatchedValue(dvar), 40, con_inputDvarInactiveValueColor);
+        ConDrawInput_TextLimitChars(Dvar_DisplayableLatchedValue(dvar), 40, con_inputDvarInactiveValueColor);
         conDrawInputGlob.y += conDrawInputGlob.fontHeight;
         conDrawInputGlob.x = conDrawInputGlob.leftX;
     }
     ConDrawInput_Text("  default", con_inputDvarInactiveValueColor);
     conDrawInputGlob.x += 200.0f;
-    ConDrawInput_DrawText(Dvar_DisplayableResetValue(dvar), 40, con_inputDvarInactiveValueColor);
+    ConDrawInput_TextLimitChars(Dvar_DisplayableResetValue(dvar), 40, con_inputDvarInactiveValueColor);
     ConDrawInput_NextLine();
     ConDrawInput_NextLine();
     Dvar_DomainToString_GetLines(dvar->type, dvar->domain, dvarInfo, sizeof(dvarInfo), &lineCount);
@@ -1223,7 +1223,7 @@ static void ConDrawInput_CmdMatch(const char *str)
     if (I_strnicmp(str, conDrawInputGlob.inputText, conDrawInputGlob.inputTextLen) != 0)
         return;
 
-    ConDrawInput_DrawText(str, 0x7fffffff, con_inputCommandMatchColor);
+    ConDrawInput_TextLimitChars(str, 0x7fffffff, con_inputCommandMatchColor);
     ConDrawInput_NextLine();
 }
 

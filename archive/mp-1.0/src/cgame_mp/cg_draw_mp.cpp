@@ -101,7 +101,7 @@ extern unsigned int Scr_GetNumScriptThreads(void);
 extern int Scr_GetStringUsage(void);
 extern int Sys_Milliseconds(void);
 extern int CL_GetCurrentCmdNumber(void);
-extern int CL_GetKeyCatchers_411460(void);
+extern int CL_GetKeyCatchers(void);
 extern qboolean CL_GetUserCmd(int cmdNumber, usercmd_t *ucmd);
 extern Bool CL_IsRenderingSplitScreen(void);
 extern void CL_SetUserCmdAimValues(vec_t *kickAngles);
@@ -118,7 +118,7 @@ extern int UI_TextHeight(FontHandle font, float fontScale);
 extern void UI_DrawText(const char *text, int maxChars, FontHandle font, float x, float y, int horzAlign, int vertAlign, float scale, const vec_t *color, int style);
 extern MaterialHandle CL_RegisterMaterial(const char *name, int flags);
 extern void CG_LocalizeHudElemString(const char *message, const char *messageType, char *hudElemString);
-extern void CG_Trace(trace_t *result, const vec_t *start, const vec_t *mins, const vec_t *maxs, const vec_t *end, int skipNumber, int mask);
+extern void CG_TraceCapsule(trace_t *result, const vec_t *start, const vec_t *mins, const vec_t *maxs, const vec_t *end, int skipNumber, int mask);
 extern int BG_GetViewmodelWeaponIndex(const playerState_t *ps);
 extern WeaponDef * BG_GetWeaponDef(int iWeapon);
 extern int BG_GetNumWeapons(void);
@@ -1270,7 +1270,7 @@ static void CG_ScanForCrosshairEntity(void)
     end[0] = cg->refdef.vieworg[0] + cg->refdef.viewaxis[0][0] * 8192.0f;
     end[1] = cg->refdef.vieworg[1] + cg->refdef.viewaxis[0][1] * 8192.0f;
     end[2] = cg->refdef.vieworg[2] + cg->refdef.viewaxis[0][2] * 8192.0f;
-    CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cg->nextSnap->ps.clientNum, 0x2000001);
+    CG_TraceCapsule(&trace, start, vec3_origin, vec3_origin, end, cg->nextSnap->ps.clientNum, 0x2000001);
     if (trace.entityNum < 64) {
         cg->crosshairClientNum = trace.entityNum;
         cg->crosshairClientTime = cg->time;

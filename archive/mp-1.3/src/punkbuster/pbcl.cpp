@@ -31,8 +31,8 @@ typedef char *(*tdPbClientConnect)(stPbCl *, int, char *, int *);
 typedef char *(*tdPbTrapPreExecCmd)(stPbCl *, char *);
 typedef void (*tdPbTrapConsole)(stPbCl *, char *, int);
 
-// retail 0x4bb450, name unknown: case-insensitive strstr (first hit in either case of the first letter)
-char *fn_4bb450(char *hay, char *needle)
+// case-insensitive strstr (first hit in either case of the first letter). Name from the Mac Steam symbols.
+char *stristr(char *hay, char *needle)
 {
 	char *first = 0;
 	char lo[2] = "x";
@@ -362,7 +362,7 @@ char *PbClGameQuery(int Qtype, char *Data)
 	case 106:
 		for ( i = atoi(Data); i < 256; i++ )
 		{
-			if ( fn_4bb450(Key_GetBinding(i), match) )
+			if ( stristr(Key_GetBinding(i), match) )
 			{
 				itoa(i, Data, 10);
 				return NULL;
@@ -381,7 +381,7 @@ char *PbClGameQuery(int Qtype, char *Data)
 		{
 			while ( PbDvarWalk(&name, &string, &flags, &reset) )
 			{
-				if ( name && string && *name && *string && fn_4bb450(string, Data) )
+				if ( name && string && *name && *string && stristr(string, Data) )
 				{
 					strncpy(Data, name, 255);
 					return NULL;

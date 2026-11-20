@@ -1149,8 +1149,8 @@ static void SND_UnpauseSounds(void)
     g_snd.pausetime = 0;
 }
 
-// retail 0x44c030, unreferenced; name unknown
-void SND_UpdatePause_44c030(void)
+// Name from the Mac Steam symbols.
+void SND_UpdatePause(void)
 {
     Bool paused;
 
@@ -1471,17 +1471,17 @@ static void SND_UpdateVolumes(int frametime)
     Dvar_ClearModified((dvar_t *)snd_volume);
     g_snd.volume = g_snd.mastervol.volume * *(float *)((char *)snd_volume + 8) * 0.75f;
 }
-int SND_Is2DChannelPlaying_44cd50(int index)
+int SND_Is2DChannelPlaying(int index)
 {
     return !SND_Is2DChannelFree(index) && !g_snd.chaninfo[index].startDelay;
 }
-int SND_Is3DChannelPlaying_44cda0(int index)
+int SND_Is3DChannelPlaying(int index)
 {
     return !SND_Is3DChannelFree(index) && !g_snd.chaninfo[index].startDelay;
 }
 
 // retail 0x44cdf0, unreferenced; name unknown
-int SND_IsStreamChannelPlaying_44cdf0(int index)
+int SND_IsStreamChannelPlaying(int index)
 {
     return !SND_IsStreamChannelFree(index) && !g_snd.chaninfo[index].startDelay;
 }

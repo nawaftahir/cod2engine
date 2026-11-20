@@ -669,7 +669,7 @@ static void FX_PrintInvalidEffect()
 	FX_Print( "FxScheduler::PlayEffect called with invalid effect\n" );
 }
 
-// Original name unknown.
+// Name from the Mac 1.3 symbols.
 void FxScheduler::PlayEffect( const FxEffectDef *fx, const vec3_t origin )
 {
 	vec3_t axis[3];
@@ -953,7 +953,7 @@ static void FX_RandomizeRoll( const PrimitiveTemplate *primTemp, vec3_t ax[3], c
 	}
 }
 
-// Original name unknown.
+// Name from the Mac 1.3 symbols.
 static void FX_AddPrimitive( EffectPrimitive *prim, vec3_t ax[3], const vec3_t origin, int lateTime, int indexInBatch )
 {
 	const PrimitiveTemplate *primTemp;

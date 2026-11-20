@@ -468,8 +468,8 @@ int LAN_GetServerStatus(char *serverAddress, char *serverStatus, int maxLen)
 extern void EnablePbCl(void);
 extern void DisablePbCl(void);
 
-// retail 0x4157b0, unreferenced; name unknown
-void fn_4157b0(int enable)
+// retail 0x4157b0, unreferenced. Name from the Mac symbols.
+void CLUI_SetPbClStatus(int enable)
 {
     if (enable)
         EnablePbCl();

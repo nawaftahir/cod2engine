@@ -143,7 +143,7 @@ static const float f_2_8 = 2.799999952316284f;
 #define IMPACT_ROCKET_EXPLODE 10
 
 void CG_EntityEvent(centity_t *cent, int event);
-void CG_PlayEquipmentSound_4da2e0(int entNum, bool isFirstPerson, bool running);
+void CG_EquipmentSound(int entNum, bool isFirstPerson, bool running);
 void CG_CheckEvents(centity_t *cent);
 
 void CG_EntityEvent(centity_t *cent, int event);
@@ -337,7 +337,7 @@ void CG_ItemPickup(int itemNum)
 }
 
 // retail 0x4da2e0 (also inlined into CG_EntityEvent); name unknown
-void CG_PlayEquipmentSound_4da2e0(int entNum, bool isFirstPerson, bool running)
+void CG_EquipmentSound(int entNum, bool isFirstPerson, bool running)
 {
     if (isFirstPerson) {
         if (running)
@@ -463,7 +463,7 @@ void CG_EntityEvent(centity_t *cent, int event)
 
         entNum = es->number;
 
-        CG_PlayEquipmentSound_4da2e0(entNum, isFirstPerson, true);
+        CG_EquipmentSound(entNum, isFirstPerson, true);
     } else if (event >= 24 && event < 47) {
 
         int sndIdx = event - 24;
@@ -482,7 +482,7 @@ void CG_EntityEvent(centity_t *cent, int event)
 
         entNum = es->number;
 
-        CG_PlayEquipmentSound_4da2e0(entNum, isFirstPerson, false);
+        CG_EquipmentSound(entNum, isFirstPerson, false);
     } else if (event >= 47 && event < 70) {
 
         int sndIdx = event - 47;
@@ -501,7 +501,7 @@ void CG_EntityEvent(centity_t *cent, int event)
 
         entNum = es->number;
 
-        CG_PlayEquipmentSound_4da2e0(entNum, isFirstPerson, false);
+        CG_EquipmentSound(entNum, isFirstPerson, false);
     } else if (event >= 70 && event < 93) {
 
         int sndIdx = event - 70;
@@ -518,7 +518,7 @@ void CG_EntityEvent(centity_t *cent, int event)
 
         entNum = es->number;
 
-        CG_PlayEquipmentSound_4da2e0(entNum, isFirstPerson, true);
+        CG_EquipmentSound(entNum, isFirstPerson, true);
         return;
     } else if (event >= 93 && event < 116) {
 

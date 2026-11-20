@@ -48,7 +48,7 @@ static const dvar_t *hud_healthOverlay_phaseEnd_pulseDuration;
 typedef void (*MemoryFileArchiveProc)(MemoryFile *memFile, int size, void *data);
 
 extern char *va( const char *format, ... );
-extern int CL_GetKeyCatchers_411460(void);
+extern int CL_GetKeyCatchers(void);
 extern Bool CL_GetDisplayHUDWithKeycatchUI(void);
 extern const char *CL_GetConfigString(int index);
 extern void CL_DrawStretchPic(float x, float y, float w, float h, int horzAlign, int vertAlign, float s1, float t1, float s2, float t2, const vec_t *color, MaterialHandle material);
@@ -242,7 +242,7 @@ void CG_AntiBurnInHUD_RegisterDvars(void)
 
 Bool CG_AreHudMenusHidden(void)
 {
-    return ((CL_GetKeyCatchers_411460() & 8) && !CL_GetDisplayHUDWithKeycatchUI()) || !cg->drawHud ? 1 : 0;
+    return ((CL_GetKeyCatchers() & 8) && !CL_GetDisplayHUDWithKeycatchUI()) || !cg->drawHud ? 1 : 0;
 }
 
 float CG_FadeHudMenu(const dvar_t *fadeDvar, int displayStartTime, int duration)
@@ -1071,7 +1071,7 @@ MaterialHandle CG_ObjectiveIconMaterial(int icon, int index)
     return cgs->media.objectiveMaterials[index];
 }
 
-// retail 0x4bf0b0, empty and unreferenced; name unknown
+// retail 0x4bf0b0, empty and unreferenced. Name from the Mac symbols.
 void CG_ApplySplitScreenCompassScale(float *x, float *y, float *w, float *h)
 {
 

@@ -234,7 +234,7 @@ int FX_GetCluster(const vec_t *origin);
 void FX_CalcOrigin2(const PrimitiveTemplate *primTemp, vec_t *org, vec_t *org2, const vec_t *origin, vec3_t *ax);
 Bool FX_GetBoneOrientation(const FxBoltInfo *bolt, orientation_t *orient);
 void FX_AddScheduledEffects(const vec_t *start, const vec_t *end);
-float FX_GetServerVisibility(const vec_t *start, const vec_t *end);
+float FX_GetEffectVisibility(const vec_t *start, const vec_t *end);
 void FX_AddCameraShake(EffectPrimitive *prim, vec3_t *ax, const vec_t *origin, const int lateTime, const int indexInBatch);
 void FX_AddFxRunner(EffectPrimitive *prim, vec3_t *ax, const vec_t *origin, const int lateTime, const int indexInBatch);
 void FX_AddDecal(EffectPrimitive *prim, vec3_t *ax, const vec_t *origin, const int lateTime, const int indexInBatch);

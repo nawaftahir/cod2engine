@@ -685,7 +685,7 @@ int Sys_StreamedRead( void *buffer, int size, int count, fileHandle_t f )
 
 void Sys_StreamSeek( fileHandle_t f, int offset, int origin )
 {
-	FS_SeekInternal(f, offset, origin);
+	FS_Seek(f, offset, origin);
 }
 
 /*

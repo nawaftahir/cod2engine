@@ -140,8 +140,8 @@ extern "C" void Com_Memcpy( void *dest, const void *src, int count );
 
 void ROQ_RunCinematic(void);
 
-// retail 0x4ace90, empty and unreferenced; name unknown
-void ROQ_Stub_4ace90(void)
+// Empty and unreferenced. Name from the Mac 1.3 symbols.
+void RoQ_ExecAnySubsequentMovies(void)
 {
 }
 

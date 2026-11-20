@@ -895,7 +895,7 @@ void CL_MouseEvent(int dx, int dy)
     }
 }
 // retail 0x407bd0, unreferenced (CL_CmdButtons inlines it); name unknown
-void CL_CmdButton_407bd0(int *buttons, int index, int bit)
+void CL_UpdateCmdButton(int *buttons, int index, int bit)
 {
     if (kb[index].active || kb[index].wasPressed)
         *buttons |= bit;

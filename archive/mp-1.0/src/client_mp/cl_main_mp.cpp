@@ -478,9 +478,9 @@ extern void *__stdcall LoadLibraryA(const char *name);
 extern void *__stdcall GetProcAddress(void *mod, const char *proc);
 extern unsigned long __stdcall GetLastError(void);
 extern "C" void Z_FreeInternal(void *ptr);
-void FX_UpdateAndDraw(void);
-void FX_UpdateNonBolt(void);
-void FX_UpdateBolt(void);
+void FX_DrawScheduledEffects(void);
+void FX_UpdateScheduledEffectsNonBolt(void);
+void FX_UpdateScheduledEffectsBolt(void);
 float GetRealWidthFromVirtualWidth(float width);
 float GetRealHeightFromVirtualHeight(float height);
 float GetVirtualWidthFromRealWidth(float width);
@@ -578,8 +578,8 @@ void Dvar_SetVec4ByName(char const *,float,float,float,float);
 void Dvar_UpdateEnumDomain(struct dvar_s const *,char const * *);
 void FS_FreeFile(void *);
 void FS_FreeFileList(char * *,int);
-void FX_UpdateBolt(void);
-void FX_UpdateNonBolt(void);
+void FX_UpdateScheduledEffectsBolt(void);
+void FX_UpdateScheduledEffectsNonBolt(void);
 void Hunk_ClearTempMemoryHighInternal(void);
 void Hunk_ClearTempMemoryInternal(void);
 void Hunk_FreeTempMemory(void *);
@@ -2024,7 +2024,7 @@ bool Voice_SendVoiceData(void)
 }
 
 // retail 0x40e6b0, unreferenced; name unknown
-void CL_VoiceFrame_40e6b0(void)
+void CL_VoiceFrame(void)
 {
     Voice_GetLocalVoiceData((ClientVoicePacket_t *)&clients[0]);
     Voice_Playback();
@@ -2338,9 +2338,9 @@ void CL_InitRef(void)
     *(void **)&ri_local.CG_CullIn = (void *)CG_CullIn;
     *(void **)&ri_local.CG_UsedDObjCalcPose = (void *)CG_UsedDObjCalcPose;
     *(void **)&ri_local.CG_AddMarks = (void *)CG_AddMarks;
-    *(void **)&ri_local.FX_UpdateNonBolt = (void *)FX_UpdateNonBolt;
-    *(void **)&ri_local.FX_UpdateBolt = (void *)FX_UpdateBolt;
-    *(void **)&ri_local.FX_UpdateAndDraw = (void *)FX_UpdateAndDraw;
+    *(void **)&ri_local.FX_UpdateNonBolt = (void *)FX_UpdateScheduledEffectsNonBolt;
+    *(void **)&ri_local.FX_UpdateBolt = (void *)FX_UpdateScheduledEffectsBolt;
+    *(void **)&ri_local.FX_UpdateAndDraw = (void *)FX_DrawScheduledEffects;
     *(void **)&ri_local.GetRealWidthFromVirtualWidth = (void *)GetRealWidthFromVirtualWidth;
     *(void **)&ri_local.GetRealHeightFromVirtualHeight = (void *)GetRealHeightFromVirtualHeight;
     *(void **)&ri_local.GetVirtualWidthFromRealWidth = (void *)GetVirtualWidthFromRealWidth;
@@ -3233,7 +3233,7 @@ void CL_DrawTextWithCursor(const char *text, int maxChars, FontHandle font, floa
 }
 
 // retail 0x411460
-int CL_GetKeyCatchers_411460(void)
+int CL_GetKeyCatchers(void)
 {
     return clients[0].keyCatchers;
 }

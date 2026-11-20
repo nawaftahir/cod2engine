@@ -422,8 +422,8 @@ int Com_GetSoundAliasRandomSeed()
 	return g_sa.randSeed;
 }
 
-// retail 0x42cd10, unreferenced; name unknown
-void Com_SetSoundAliasRandomSeed_42cd10(int seed)
+// retail 0x42cd10, unreferenced. Name from the Mac symbols.
+void Com_SetSoundAliasSeed(int seed)
 {
 	g_sa.randSeed = seed;
 }

@@ -13,7 +13,7 @@ void G_SetEquippedOffHand( int clientNum, int offHandIndex );
 
 
 void gunrandom( float *x, float *y );
-void Bullet_RandomSpread( float spread, vec3_t end, const weaponParms *wp, float maxRange );
+void Bullet_Endpos( float spread, vec3_t end, const weaponParms *wp, float maxRange );
 int Bullet_GetDamage( const weaponParms *wp, float dist );
 void G_AntiLagRewindClientPos( int gameTime, AntilagClientStore *antilagStore );
 void G_AntiLag_RestoreClientPos( AntilagClientStore *antilagStore );
@@ -156,10 +156,10 @@ void gunrandom( float *x, float *y )
 
 /*
 ===============
-Bullet_RandomSpread
+Bullet_Endpos
 ===============
 */
-void Bullet_RandomSpread( float spread, vec3_t end, const weaponParms *wp, float maxRange )
+void Bullet_Endpos( float spread, vec3_t end, const weaponParms *wp, float maxRange )
 {
 	float right;
 	float up;
@@ -428,7 +428,7 @@ void G_BulletFireSpread( const gentity_t *weaponEnt, gentity_t *attacker, const 
 
 	for ( i = 0; i < wp->weapDef->shotCount; i++ )
 	{
-		Bullet_RandomSpread(spread, end, wp, wp->weapDef->minDamageRange);
+		Bullet_Endpos(spread, end, wp, wp->weapDef->minDamageRange);
 		Bullet_Fire_Extended(weaponEnt, attacker, start, end, 1.0, 0, wp, weaponEnt, gameTime);
 	}
 }
@@ -456,7 +456,7 @@ void Bullet_Fire( gentity_t *attacker, float spread, weaponParms *wp, gentity_t 
 	}
 	else
 	{
-		Bullet_RandomSpread(spread, endpos, wp, 8192);
+		Bullet_Endpos(spread, endpos, wp, 8192);
 		Bullet_Fire_Extended(weaponEnt, attacker, wp->muzzleTrace, endpos, 1.0, 0, wp, weaponEnt, gametime);
 	}
 

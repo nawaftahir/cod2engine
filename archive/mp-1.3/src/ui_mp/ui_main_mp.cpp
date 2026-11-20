@@ -2166,7 +2166,7 @@ static void UI_SelectCurrentGameType(void)
 
 // retail 0x52fd50; name unknown
 // retail 0x52fd30, unreferenced; name unknown
-bool UI_IsMapActive_52fd30(int map)
+bool UI_IsMapActive(int map)
 {
     return sharedUiInfo.mapList[map].active != 0;
 }
@@ -2774,7 +2774,7 @@ static int UI_GetIndexFromSelection(int actual)
 }
 
 // retail 0x5310d0, unreferenced; name unknown
-void UI_RefreshServerPings_5310d0(void)
+void UI_UpdatePendingPings(void)
 {
     LAN_ResetPings((ui_netSource)->current.integer);
     sharedUiInfo.serverStatus.refreshActive = 1;

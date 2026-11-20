@@ -41,7 +41,7 @@ extern snd_alias_t *Com_PickSoundAlias( const char *aliasName );
 extern const char *Cmd_Argv( int arg );
 extern int Cmd_Argc(void);
 extern void Cmd_TokenizeString(const char *text);
-extern void Cmd_TokenizeStringWithLimit(const char *text_in, int max_tokens);
+extern void Cmd_TokenizeString2(const char *text_in, int max_tokens);
 extern void Cmd_AddCommand(const char *cmd, void (*func)(void));
 extern int I_stricmp(const char *s1, const char *s2);
 extern int I_strnicmp(const char *s1, const char *s2, int n);
@@ -501,7 +501,7 @@ restart:
         }
 
     case 'x':
-        Cmd_TokenizeStringWithLimit(s, 3);
+        Cmd_TokenizeString2(s, 3);
         {
             const char *arg2 = Cmd_Argv(2);
             const char *arg1 = Cmd_Argv(1);
@@ -509,7 +509,7 @@ restart:
         }
         return 0;
     case 'y':
-        Cmd_TokenizeStringWithLimit(s, 3);
+        Cmd_TokenizeString2(s, 3);
         {
             const char *arg2 = Cmd_Argv(2);
             if (strlen(bigConfigString) + strlen(arg2) >= 0x2000) {
@@ -519,7 +519,7 @@ restart:
         }
         return 0;
     case 'z':
-        Cmd_TokenizeStringWithLimit(s, 3);
+        Cmd_TokenizeString2(s, 3);
         {
             const char *arg2 = Cmd_Argv(2);
             if (strlen(bigConfigString) + strlen(arg2) + 1 >= 0x2000) {
@@ -530,9 +530,9 @@ restart:
         s = bigConfigString;
         goto restart;
     case 'd':
-        Cmd_TokenizeStringWithLimit(s, 3);
+        Cmd_TokenizeString2(s, 3);
         CL_ConfigstringModified();
-        Cmd_TokenizeStringWithLimit(s, 3);
+        Cmd_TokenizeString2(s, 3);
         return 1;
     case 'B':
     case 'n':
@@ -724,8 +724,8 @@ snd_alias_t *CL_PickSoundAlias(const char *aliasname)
     return Com_PickSoundAlias(aliasname);
 }
 
-// retail 0x402040, unreferenced; name unknown
-void CL_DObjCreate_402040(struct DObjModel_s *dobjModels, unsigned short numModels, struct XAnimTree_s *tree, struct DObj_s *obj)
+// retail 0x402040, unreferenced. Name from the Mac symbols.
+void CL_DObjCreate(struct DObjModel_s *dobjModels, unsigned short numModels, struct XAnimTree_s *tree, struct DObj_s *obj)
 {
     DObjCreate(dobjModels, numModels, tree, obj, 0);
 }
@@ -745,8 +745,8 @@ void CL_FinishLoadingModels(void)
     RE->FinishLoadingModels();
 }
 
-// retail 0x402090, unreferenced; name unknown
-void CL_SetIgnorePrecacheErrors_402090(qboolean ignore)
+// retail 0x402090, unreferenced. Name from the Mac symbols.
+void CL_SetIgnorePrecacheErrors(qboolean ignore)
 {
     RE->SetIgnorePrecacheErrors(ignore);
 }
@@ -995,8 +995,8 @@ void CL_CapTurnRate(float maxPitchSpeed, float maxYawSpeed)
     cl->cgameMaxYawSpeed = maxYawSpeed;
 }
 
-// retail 0x4025e0, unreferenced; name unknown
-void CL_SetViewAngles_4025e0(const vec_t *angles)
+// retail 0x4025e0, unreferenced. Name from the Mac symbols.
+void CL_SetViewAngles(const vec_t *angles)
 {
     clientActive_t *cl = CL_LOCAL;
     vec_t *dst = cl->viewangles;

@@ -157,7 +157,7 @@ void Sys_WaitEventB_4625e0(void)
 }
 
 // retail 0x462600, name unknown
-void Sys_SuspendOtherThreads_462600(void)
+void Sys_SuspendOtherThreads(void)
 {
     DWORD cur = GetCurrentThreadId();
     int i;

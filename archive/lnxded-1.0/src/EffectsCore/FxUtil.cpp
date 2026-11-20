@@ -1153,7 +1153,7 @@ int FX_GetCluster( const vec3_t origin )
 	return effectClusterCount - 1;
 }
 
-void FX_RemoveCluster( int clusterId )
+void FX_FreeEffectInCluster( int clusterId )
 {
 	int i;
 
@@ -1414,7 +1414,7 @@ static void FX_FreeRemovedBolt()
 	for ( i = privateEffectActiveCountBolt; i < initialEffectActiveCountBolt; i++, effectActiveCount-- )
 	{
 		fx = effectListBolt[i];
-		FX_RemoveCluster(fx->mClusterId);
+		FX_FreeEffectInCluster(fx->mClusterId);
 		delete fx;
 		effectActiveCountBolt--;
 		effectListBolt[i] = effectListBolt[effectActiveCountBolt];
@@ -1430,7 +1430,7 @@ static void FX_FreeRemovedNonBolt()
 	for ( i = privateEffectActiveCountNonBolt; i < initialEffectActiveCountNonBolt; i++, effectActiveCount-- )
 	{
 		fx = effectListNonBolt[i];
-		FX_RemoveCluster(fx->mClusterId);
+		FX_FreeEffectInCluster(fx->mClusterId);
 		delete fx;
 		effectActiveCountNonBolt--;
 		effectListNonBolt[i] = effectListNonBolt[effectActiveCountNonBolt];
@@ -1474,7 +1474,7 @@ static void FX_ArchiveEffect( Effect *fx, FxArchive *arch )
 	fx->Archive(arch);
 }
 
-// Original name unknown.
+// Name from the Mac demo symbols.
 int FX_Save( MemoryFile *memFile )
 {
 	FxArchive arch;
@@ -1724,8 +1724,8 @@ void FX_UpdateAllNonBolt()
 	FX_FreeRemovedNonBolt();
 }
 
-// Original name unknown.
-void FX_UpdateNewBolt( int start )
+// Name from the Mac demo symbols.
+void FX_UpdateAllBeforeDrawBolt( int start )
 {
 	Effect *fx;
 	bool keep;
@@ -1769,8 +1769,8 @@ static void FX_CollectVisibleBolt()
 	cullEffectCountBolt = privateEffectActiveCountBolt;
 }
 
-// Original name unknown.
-void FX_UpdateNewNonBolt( int start )
+// Name from the Mac demo symbols.
+void FX_UpdateAllBeforeDrawNonBolt( int start )
 {
 	Effect *fx;
 	bool keep;
@@ -2472,7 +2472,7 @@ void FX_UpdateScheduledEffectsNonBolt()
 		return;
 	cullEffectCountNonBolt = 0;
 	visibleEffectCountNonBolt = 0;
-	FX_UpdateNewNonBolt(0);
+	FX_UpdateAllBeforeDrawNonBolt(0);
 	FX_CollectVisibleNonBolt();
 }
 
@@ -2482,7 +2482,7 @@ void FX_UpdateScheduledEffectsBolt()
 		return;
 	cullEffectCountBolt = 0;
 	visibleEffectCountBolt = 0;
-	FX_UpdateNewBolt(0);
+	FX_UpdateAllBeforeDrawBolt(0);
 	FX_CollectVisibleBolt();
 }
 
@@ -2497,11 +2497,11 @@ void FX_DrawScheduledEffects()
 	FX_AddScheduledEffects();
 	count = privateEffectActiveCountNonBolt;
 	privateEffectActiveCountNonBolt = effectActiveCountNonBolt;
-	FX_UpdateNewNonBolt(count);
+	FX_UpdateAllBeforeDrawNonBolt(count);
 	FX_FreeRemovedNonBolt();
 	count = privateEffectActiveCountBolt;
 	privateEffectActiveCountBolt = effectActiveCountBolt;
-	FX_UpdateNewBolt(count);
+	FX_UpdateAllBeforeDrawBolt(count);
 	FX_FreeRemovedBolt();
 	FX_DrawAll();
 }

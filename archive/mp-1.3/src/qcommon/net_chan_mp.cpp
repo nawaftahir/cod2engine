@@ -77,7 +77,7 @@ void NET_SendLoopPacket( int sock, int length, const void *data, netadr_t to );
 bool NET_SendPacket( netsrc_t sock, int length, const void *data, netadr_t to );
 unsigned char NET_OutOfBandPrint( netsrc_t sock, netadr_t adr, const char *data );
 unsigned char NET_OutOfBandData( netsrc_t sock, netadr_t adr, byte *format, int len );
-void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len );
+void NET_OutOfBandPbPacket( netsrc_t sock, netadr_t adr, byte *format, int len );
 qboolean NET_StringToAdr( const char *s, netadr_t *a );
 
 /*
@@ -1052,10 +1052,10 @@ unsigned char NET_OutOfBandData( netsrc_t sock, netadr_t adr, byte *format, int 
 
 /*
 ===============
-NET_OutOfBandVoiceData
+NET_OutOfBandPbPacket
 ================
 */
-void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len )
+void NET_OutOfBandPbPacket( netsrc_t sock, netadr_t adr, byte *format, int len )
 {
 	LargeLocal stringLarge( MAX_MSGLEN + 4 );
 	byte *string = (byte *)stringLarge.GetBuf();
@@ -1090,8 +1090,8 @@ void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len 
 		CL_Netchan_AddOOBProfilePacket(iLen);
 }
 
-// Original name unknown. Twin of NET_OutOfBandVoiceData, used by SV_SendClientVoiceData.
-void NET_OutOfBandVoiceData2( netsrc_t sock, netadr_t adr, byte *format, int len )
+// Name from the Mac 1.3 symbols.
+void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len )
 {
 	LargeLocal stringLarge( MAX_MSGLEN + 4 );
 	byte *string = (byte *)stringLarge.GetBuf();

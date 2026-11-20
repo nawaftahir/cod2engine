@@ -1144,8 +1144,8 @@ char *Key_GetBinding(int keynum)
     return keys[keynum].binding;
 }
 
-// retail 0x40b100, unreferenced, name unknown
-int fn_40b100(void)
+// retail 0x40b100, unreferenced. Name from the Mac symbols.
+int PbMaxKeys(void)
 {
     return 256;
 }

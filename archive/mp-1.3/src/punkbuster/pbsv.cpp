@@ -29,8 +29,8 @@ inline void pbChmod_813cbd4(char *path)
 	_chmod(path, 0x180);
 }
 
-// name unknown (no Mac symbol)
-inline int pbCopyFile_813cf52(char *fromFn, char *toFn, int maxSize)
+// Name from the Mac Steam symbols.
+inline int PbCopyFile(char *fromFn, char *toFn, int maxSize)
 {
 	FILE *fs;
 	int res;
@@ -94,7 +94,7 @@ inline void stPbSv::copyIfNotExists(char *fn, char *basepath)
 	{
 		strcpy(fromFn, basepath);
 		strcat(fromFn, fn);
-		pbCopyFile_813cf52(fromFn, toFn, 0);
+		PbCopyFile(fromFn, toFn, 0);
 	}
 }
 

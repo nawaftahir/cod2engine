@@ -764,7 +764,7 @@ static void CG_RemoveChatEscapeChar(char *text)
 }
 
 // retail 0x4cb300, unreferenced; name unknown
-void CG_SetTeamScore_4cb300(int team, int score)
+void CG_SetTeamScore(int team, int score)
 {
     cgs->teamScores[team] = score;
 }
@@ -870,19 +870,19 @@ static void CG_LocalSoundCmd(void)
 }
 
 // retail 0x4cb820, unreferenced; name unknown
-void CG_SetObjectiveText_4cb820(const char *text)
+void CG_SetObjectiveText(const char *text)
 {
     I_strncpyz(cg->objectiveText, text, sizeof(cg->objectiveText));
 }
 
 // retail 0x4cb840, unreferenced; name unknown
-void CG_SetDrawHud_4cb840(int drawHud)
+void CG_SetDrawHud(int drawHud)
 {
     cg->drawHud = drawHud;
 }
 
 // retail 0x4cb850, unreferenced; name unknown
-void CG_SetScriptMainMenu_4cb850(const char *text)
+void CG_SetScriptMainMenu(const char *text)
 {
     I_strncpyz(cg->scriptMainMenu, text, sizeof(cg->scriptMainMenu));
 }

@@ -1,7 +1,7 @@
 #include "../qcommon/qcommon.h"
 #include "bg_public.h"
 
-void CG_Trace( trace_t *results, const float *start, const float *mins, const float *maxs, const float *end, int skipNumber, int mask );
+void CG_TraceCapsule( trace_t *results, const float *start, const float *mins, const float *maxs, const float *end, int skipNumber, int mask );
 int CG_PointContents( const float *point, int passEntityNum, int contentMask );
 
 viewLerpWaypoint_s viewLerp_StandCrouch[] =
@@ -67,7 +67,7 @@ viewLerpWaypoint_s viewLerp_ProneCrouch[] =
 
 pmoveHandler_t pmoveHandlers[] =
 {
-	{ CG_Trace, CG_PointContents, NULL },
+	{ CG_TraceCapsule, CG_PointContents, NULL },
 	{ G_TraceCapsule, SV_PointContents, G_PlayerEvent },
 };
 

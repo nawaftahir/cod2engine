@@ -991,10 +991,10 @@ qboolean NET_OutOfBandData( netsrc_t sock, netadr_t adr, byte *format, int len )
 
 /*
 ===============
-NET_OutOfBandVoiceData
+NET_OutOfBandPbPacket
 ================
 */
-void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len )
+void NET_OutOfBandPbPacket( netsrc_t sock, netadr_t adr, byte *format, int len )
 {
 	LargeLocal stringLarge( MAX_MSGLEN + 4 );
 	byte *string = (byte *)stringLarge.GetBuf();
@@ -1027,8 +1027,8 @@ void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len 
 		SV_Netchan_AddOOBProfilePacket(iLen);
 }
 
-// Original name unknown. Byte-identical twin of NET_OutOfBandVoiceData, used by SV_SendClientVoiceData.
-void NET_OutOfBandVoiceData2( netsrc_t sock, netadr_t adr, byte *format, int len )
+// Name from the Mac 1.3 symbols.
+void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len )
 {
 	LargeLocal stringLarge( MAX_MSGLEN + 4 );
 	byte *string = (byte *)stringLarge.GetBuf();

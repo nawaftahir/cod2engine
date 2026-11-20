@@ -129,7 +129,7 @@ static punctuation_t default_punctuations[] =
 // Returns:					-
 // Changes Globals:		-
 //===========================================================================
-void PC_CreatePunctuationTable(script_t *script, punctuation_t *punctuations)
+void PS_CreatePunctuationTable(script_t *script, punctuation_t *punctuations)
 {
 	int i;
 	punctuation_t *p, *lastp, *newp;
@@ -162,7 +162,7 @@ void PC_CreatePunctuationTable(script_t *script, punctuation_t *punctuations)
 			else script->punctuationtable[(unsigned int) newp->p[0]] = newp;
 		} //end if
 	} //end for
-} //end of the function PC_CreatePunctuationTable
+} //end of the function PS_CreatePunctuationTable
 
 //===========================================================================
 //
@@ -229,12 +229,12 @@ void SetScriptPunctuations(script_t *script, punctuation_t *p)
 {
 	if (p)
 	{
-		PC_CreatePunctuationTable(script, p);
+		PS_CreatePunctuationTable(script, p);
 		script->punctuations = p;
 	} //end if
 	else
 	{
-		PC_CreatePunctuationTable(script, default_punctuations);
+		PS_CreatePunctuationTable(script, default_punctuations);
 		script->punctuations = default_punctuations;
 	} //end else
 } //end of the function SetScriptPunctuations

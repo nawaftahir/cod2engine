@@ -2125,7 +2125,7 @@ void PlayerCmd_AllowSpectateTeam(scr_entref_t entref);
 void PlayerCmd_GetGuid(scr_entref_t entref);
 
 int Bullet_GetDamage( const weaponParms *wp, float dist );
-void Bullet_RandomSpread( float spread, float *end, const weaponParms *wp, float maxRange );
+void Bullet_Endpos( float spread, float *end, const weaponParms *wp, float maxRange );
 void CalcMuzzlePoints( gentity_t *ent, weaponParms *wp );
 bool Melee_Trace(gentity_t *ent, weaponParms *wp, int damage, float range, float width, float height, trace_t *traceResult, float *hitOrigin);
 void G_BulletFireSpread(const gentity_s *weaponEnt, gentity_s *attacker, const weaponParms *wp, int gameTime, float spread);

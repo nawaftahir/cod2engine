@@ -43,7 +43,7 @@ extern void YawToAxis(float yaw, vec3_t axis[3]);
 extern void MatrixMultiply43(const float in1[4][3], const float in2[4][3], float out[4][3]);
 extern void AxisToAngles( vec3_t axis[3], vec3_t angles );
 extern void RotateVec2(vec2_t v, float degrees);
-extern void CG_Trace(trace_t *result, const vec_t *start, const vec_t *mins, const vec_t *maxs, const vec_t *end, int skipNumber, int mask);
+extern void CG_TraceCapsule(trace_t *result, const vec_t *start, const vec_t *mins, const vec_t *maxs, const vec_t *end, int skipNumber, int mask);
 extern const vec3_t vec3_origin;
 extern void ConvertQuatToMat(const DObjAnimMat *mat, float axis[3][3]);
 extern void Vec3Lerp(const vec3_t start, const vec3_t end, float fraction, vec3_t endpos);
@@ -369,7 +369,7 @@ static void CG_PlayerTurretPositionAndBlend(centity_t *cent)
     end[1] = cent->lerpOrigin[1];
     end[2] = cent->lerpOrigin[2];
     start[2] = pTurretCEnt->lerpOrigin[2];
-    CG_Trace(&trace, start, vec3_origin, vec3_origin, end, cent->nextState.number, 0x2810011);
+    CG_TraceCapsule(&trace, start, vec3_origin, vec3_origin, end, cent->nextState.number, 0x2810011);
     if (trace.fraction < 1.0f)
     {
         Vec3Lerp(start, end, trace.fraction, endpos);

@@ -67,7 +67,7 @@ extern void FX_AdjustTime(int serverTime);
 extern int CG_PointContents(const vec_t *point, int passEntityNum, int contentmask);
 extern void CG_PredictPlayerState(void);
 extern void AngleVectors( const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up );
-extern void CG_Trace(trace_t *result, const vec_t *start, const vec_t *mins, const vec_t *maxs, const vec_t *end, int skipNumber, int mask);
+extern void CG_TraceCapsule(trace_t *result, const vec_t *start, const vec_t *mins, const vec_t *maxs, const vec_t *end, int skipNumber, int mask);
 extern float CL_GetMenuBlurRadius(void);
 extern void SetScreenScaling(float scaleX, float scaleY, float x, float y, float w, float h);
 extern float BG_GetBobCycle(const playerState_t *ps);
@@ -199,7 +199,7 @@ static void CG_OffsetThirdPersonView(void)
     AngleVectors(cg->refdefViewAngles, forward, right, up);
     VectorMA(view, -cg_thirdPersonRange->current.value, forward, view);
     // keep the camera out of solids
-    CG_Trace(&trace, cg->refdef.vieworg, mins, maxs, view, cg->predictedPlayerState.clientNum, 0x811);
+    CG_TraceCapsule(&trace, cg->refdef.vieworg, mins, maxs, view, cg->predictedPlayerState.clientNum, 0x811);
     if (trace.fraction != 1.0)
     {
         view[0] = (view[0] - cg->refdef.vieworg[0]) * trace.fraction + cg->refdef.vieworg[0];
@@ -207,7 +207,7 @@ static void CG_OffsetThirdPersonView(void)
         view[2] = (view[2] - cg->refdef.vieworg[2]) * trace.fraction + cg->refdef.vieworg[2];
         view[2] += (1.0f - trace.fraction) * 32.0f;
         // a tunnel ceiling may be close enough to poke through
-        CG_Trace(&trace, cg->refdef.vieworg, mins, maxs, view, cg->predictedPlayerState.clientNum, 0x811);
+        CG_TraceCapsule(&trace, cg->refdef.vieworg, mins, maxs, view, cg->predictedPlayerState.clientNum, 0x811);
         view[0] = (view[0] - cg->refdef.vieworg[0]) * trace.fraction + cg->refdef.vieworg[0];
         view[1] = (view[1] - cg->refdef.vieworg[1]) * trace.fraction + cg->refdef.vieworg[1];
         view[2] = (view[2] - cg->refdef.vieworg[2]) * trace.fraction + cg->refdef.vieworg[2];

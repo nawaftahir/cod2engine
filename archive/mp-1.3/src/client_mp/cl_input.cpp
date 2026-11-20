@@ -72,7 +72,7 @@ extern void MSG_WriteDeltaUsercmdKey(msg_t *msg, int key, usercmd_t *from, userc
 extern int Com_HashKey( const char *string, int maxlen );
 extern void CL_Netchan_Transmit(netchan_t *chan, byte *data, int length);
 extern void CL_Netchan_TransmitNextFragment(netchan_t *chan);
-extern void NET_OutOfBandVoiceData2(netsrc_t sock, netadr_t adr, byte *format, int len);
+extern void NET_OutOfBandVoiceData(netsrc_t sock, netadr_t adr, byte *format, int len);
 extern void CL_SyncGpu(void);
 extern void CL_SendCmdInternal(void);
 extern int PM_IsBinocularsADS(const playerState_t *ps);
@@ -895,7 +895,7 @@ void CL_MouseEvent(int dx, int dy)
     }
 }
 // retail 0x407bd0, unreferenced (CL_CmdButtons inlines it); name unknown
-void CL_CmdButton_407bd0(int *buttons, int index, int bit)
+void CL_UpdateCmdButton(int *buttons, int index, int bit)
 {
     if (kb[index].active || kb[index].wasPressed)
         *buttons |= bit;
@@ -1144,7 +1144,7 @@ void CL_WriteVoicePacket(void)
     }
 
     conn = &::clc;
-    NET_OutOfBandVoiceData2(conn->netchan.sock, conn->serverAddress, msg.data, msg.cursize);
+    NET_OutOfBandVoiceData(conn->netchan.sock, conn->serverAddress, msg.data, msg.cursize);
 }
 
 void CL_WritePacket(void)

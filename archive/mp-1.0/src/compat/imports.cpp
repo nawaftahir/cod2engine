@@ -38,5 +38,5 @@ void Sys_DirectXFatalError( void );
 void Dvar_ClearFlagsFromAll(int flags);
 char *XModelGetBasePoseOffset(const XModel *model, unsigned int offset);
 void DB_EnumXAssets(XAssetType type, void (*func)(XAssetHeader, void *), void *inData, bool includeOverride);
-void FX_UpdateAndDraw();
+void FX_DrawScheduledEffects();
 /* Dead pointers (keep the callees address-taken); parked at the end of .data */

@@ -216,7 +216,7 @@ extern void Com_Memset(void *dest, const int val, int count);
 extern qboolean NET_CompareAdr(netadr_t a, netadr_t b);
 extern int NET_CompareBaseAdr(netadr_t a, netadr_t b);
 extern const char *NET_AdrToString(netadr_t a);
-extern void NET_OutOfBandVoiceData(netsrc_t sock, netadr_t adr, unsigned char *format, int len);
+extern void NET_OutOfBandPbPacket(netsrc_t sock, netadr_t adr, unsigned char *format, int len);
 extern qboolean NET_StringToAdr(const char *s, netadr_t *a);
 extern unsigned char NET_OutOfBandPrint(netsrc_t sock, netadr_t adr, const char *msg);
 extern unsigned char NET_OutOfBandData(netsrc_t sock, netadr_t adr, unsigned char *data, int len);
@@ -406,7 +406,7 @@ void CL_StopLogoOrCinematic(void);
 void CL_AddDebugLine(const vec_t *start, const vec_t *end, const vec_t *color, qboolean depthTest, int duration, qboolean fromServer);
 void CL_AddDebugString(const vec_t *xyz, const vec_t *color, float scale, const char *text, qboolean fromServer);
 void CL_RequestAuthorization(void);
-static void fn_40d310(void);
+static void CL_CheckForUpdateKeyAuth(void);
 void CL_CheckForResend(void);
 void CL_LocalServers_f(void);
 void CL_PlayLogo_f(void);
@@ -475,9 +475,9 @@ extern "C" __declspec(dllimport) void __stdcall Sleep(unsigned long ms);
 extern void *__stdcall GetProcAddress(void *mod, const char *proc);
 extern unsigned long __stdcall GetLastError(void);
 extern "C" void Z_FreeInternal(void *ptr);
-void FX_UpdateAndDraw(void);
-void FX_UpdateNonBolt(void);
-void FX_UpdateBolt(void);
+void FX_DrawScheduledEffects(void);
+void FX_UpdateScheduledEffectsNonBolt(void);
+void FX_UpdateScheduledEffectsBolt(void);
 float GetRealWidthFromVirtualWidth(float width);
 float GetRealHeightFromVirtualHeight(float height);
 float GetVirtualWidthFromRealWidth(float width);
@@ -587,8 +587,8 @@ void Dvar_SetVec4ByName(char const *,float,float,float,float);
 void Dvar_UpdateEnumDomain(struct dvar_s const *,char const * *);
 void FS_FreeFile(void *);
 void FS_FreeFileList(char * *,int);
-void FX_UpdateBolt(void);
-void FX_UpdateNonBolt(void);
+void FX_UpdateScheduledEffectsBolt(void);
+void FX_UpdateScheduledEffectsNonBolt(void);
 void Hunk_ClearTempMemoryHighInternal(void);
 void Hunk_ClearTempMemoryInternal(void);
 void Hunk_FreeTempMemory(void *);
@@ -1364,7 +1364,7 @@ void CL_RequestAuthorization(void)
 }
 
 /* retail 0x40d310, unnamed: re-authorize an active client every 300 s; called at the end of CL_Frame */
-static __declspec(noinline) void fn_40d310(void)
+static __declspec(noinline) void CL_CheckForUpdateKeyAuth(void)
 {
     if (clc.state == CA_ACTIVE && cls.realtime - lastUpdateKeyAuthTime > 300000) {
         if (net_lanauthorize->current.enabled || !Sys_IsLANAddress(clc.serverAddress))
@@ -1813,7 +1813,7 @@ void PBget_cl_cdkey(char *out)
 /* retail 0x40e490 (Mac name) */
 void CL_SendPbPacket(int len, char *data)
 {
-    NET_OutOfBandVoiceData(NS_CLIENT1, clc.serverAddress, (unsigned char *)data, len);
+    NET_OutOfBandPbPacket(NS_CLIENT1, clc.serverAddress, (unsigned char *)data, len);
 }
 
 /* retail 0x40e4d0 (Mac name) */
@@ -2187,7 +2187,7 @@ bool Voice_SendVoiceData(void)
 }
 
 // retail 0x40e6b0, unreferenced; name unknown
-void CL_VoiceFrame_40e6b0(void)
+void CL_VoiceFrame(void)
 {
     Voice_GetLocalVoiceData((ClientVoicePacket_t *)&clients[0]);
     Voice_Playback();
@@ -2248,7 +2248,7 @@ void CL_Frame(void)
     CL_SetCGameTime();
     CL_SendCmd();
 #if COD2_IS_PATCH_13
-    fn_40d310();
+    CL_CheckForUpdateKeyAuth();
 #endif
 }
 bool CL_IsLocalClientInGame(void)
@@ -2536,9 +2536,9 @@ void CL_InitRef(void)
     *(void **)&ri_local.CG_CullIn = (void *)CG_CullIn;
     *(void **)&ri_local.CG_UsedDObjCalcPose = (void *)CG_UsedDObjCalcPose;
     *(void **)&ri_local.CG_AddMarks = (void *)CG_AddMarks;
-    *(void **)&ri_local.FX_UpdateNonBolt = (void *)FX_UpdateNonBolt;
-    *(void **)&ri_local.FX_UpdateBolt = (void *)FX_UpdateBolt;
-    *(void **)&ri_local.FX_UpdateAndDraw = (void *)FX_UpdateAndDraw;
+    *(void **)&ri_local.FX_UpdateNonBolt = (void *)FX_UpdateScheduledEffectsNonBolt;
+    *(void **)&ri_local.FX_UpdateBolt = (void *)FX_UpdateScheduledEffectsBolt;
+    *(void **)&ri_local.FX_UpdateAndDraw = (void *)FX_DrawScheduledEffects;
     *(void **)&ri_local.GetRealWidthFromVirtualWidth = (void *)GetRealWidthFromVirtualWidth;
     *(void **)&ri_local.GetRealHeightFromVirtualHeight = (void *)GetRealHeightFromVirtualHeight;
     *(void **)&ri_local.GetVirtualWidthFromRealWidth = (void *)GetVirtualWidthFromRealWidth;
@@ -3473,7 +3473,7 @@ void CL_DrawTextWithCursor(const char *text, int maxChars, FontHandle font, floa
 }
 
 // retail 0x411460
-int CL_GetKeyCatchers_411460(void)
+int CL_GetKeyCatchers(void)
 {
     return clients[0].keyCatchers;
 }

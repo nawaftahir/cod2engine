@@ -170,7 +170,7 @@ extern int fs_numServerIwds;
 
 qboolean FS_Initialized();
 long FS_HashFileName( const char *fname, int hashSize );
-int FS_SeekInternal( int f, int offset, int origin );
+int FS_Seek( int f, int offset, int origin );
 int FS_Read(void *buffer, int len, fileHandle_t h);
 int FS_ReadFile(const char* qpath, void** buffer);
 void FS_FreeFile(void* buffer);

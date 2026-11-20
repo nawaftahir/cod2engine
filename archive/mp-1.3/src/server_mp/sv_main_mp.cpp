@@ -876,7 +876,7 @@ void SV_SendPbPacket( int datalen, char *data, int clientNum )
 			continue;
 		}
 
-		NET_OutOfBandVoiceData( NS_SERVER, svs.clients[i].netchan.remoteAddress, (byte *)data, datalen );
+		NET_OutOfBandPbPacket( NS_SERVER, svs.clients[i].netchan.remoteAddress, (byte *)data, datalen );
 	}
 }
 

@@ -14,7 +14,7 @@ extern float floorf(float x);
 
 extern void FS_FCloseFile(fileHandle_t f);
 extern int FS_FOpenFileReadStream(const char *filename, int *file, int uniqueFILE);
-extern int FS_SeekInternal(int f, int offset, int origin);
+extern int FS_Seek(int f, int offset, int origin);
 extern int FS_FTell(int f);
 extern int FS_Read(void *buffer, int len, int f);
 extern int FS_ReadFile(const char *qpath, void **buffer);
@@ -308,7 +308,7 @@ static long int __stdcall MSS_FileSeekCallback(long unsigned int hFileHandle, lo
     default:
         return 0;
     }
-    FS_SeekInternal((int)hFileHandle, offset, origin);
+    FS_Seek((int)hFileHandle, offset, origin);
     return FS_FTell((int)hFileHandle);
 }
 
@@ -318,7 +318,7 @@ static long unsigned int __stdcall MSS_FileReadCallback(long unsigned int hFileH
 }
 
 // retail 0x4b2670, unreferenced; name unknown
-HDIGDRIVER MSS_OpenDigitalDriver_4b2670(int hertz, int bits, int channels)
+HDIGDRIVER MSS_open_digital_driver(int hertz, int bits, int channels)
 {
     AIL_set_preference(1, 53);
     return (HDIGDRIVER)AIL_open_digital_driver(hertz, bits, channels, 0);

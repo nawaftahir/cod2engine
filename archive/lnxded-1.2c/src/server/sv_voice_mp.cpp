@@ -1,7 +1,7 @@
 #include "../qcommon/qcommon.h"
 #include "../qcommon/netchan.h"
 
-void NET_OutOfBandVoiceData2( netsrc_t sock, netadr_t adr, byte *format, int len );
+void NET_OutOfBandVoiceData( netsrc_t sock, netadr_t adr, byte *format, int len );
 
 /*
 ==================
@@ -46,7 +46,7 @@ void SV_SendClientVoiceData( client_t *client )
 		return;
 	}
 
-	NET_OutOfBandVoiceData2(NS_SERVER, client->netchan.remoteAddress, msg.data, msg.cursize);
+	NET_OutOfBandVoiceData(NS_SERVER, client->netchan.remoteAddress, msg.data, msg.cursize);
 	client->voicePacketCount = 0;
 }
 

@@ -292,7 +292,7 @@ UiRectangle *Window_Getter_533880(Window *w) { return &w->rectEffects0[0]; }
 UiRectangle *Window_Getter_533890(Window *w) { return &w->rectEffects1[0]; }
 int Window_Getter_5338a0(Window *w) { return w->staticFlags; }
 int Menu_Getter_5338b0(menuDef_t *menu) { return menu->cursorItem[0]; }
-UiRectangle *Item_Getter_5338c0(itemDef_t *item) { return &item->textRect[CL_Zero_40b4d0()]; }
+UiRectangle *Item_GetTextRect(itemDef_t *item) { return &item->textRect[CL_Zero_40b4d0()]; }
 static bool Window_IsHorizontal(Window *w)
 {
     return ((unsigned int)w->staticFlags >> 21) & 1;
@@ -1139,7 +1139,7 @@ void Script_SetDvar(displayContextDef_t *dc, itemDef_t *item, const char **args)
 }
 
 // retail 0x535660, unreferenced; name unknown
-void Script_ExecHandler_535660(int execWhen, const char **args)
+void Script_ExecHandler(int execWhen, const char **args)
 {
     char val[0x400];
     if (String_Parse(args, val, 0x400)) {
@@ -2669,7 +2669,7 @@ static rectDef_t *Item_CorrectedTextRect(itemDef_t *item)
 
     memset(&rect, 0, sizeof(rect));
     if (item) {
-        textRect = Item_Getter_5338c0(item);
+        textRect = Item_GetTextRect(item);
         rect = *textRect;
         if (rect.w != 0.0f)
             rect.y -= rect.h;

@@ -4,7 +4,7 @@
 #include "../qcommon/netchan.h"
 
 
-float FX_GetVisibility( const vec3_t start, const vec3_t end );
+float FX_GetServerVisibility( const vec3_t start, const vec3_t end );
 
 
 typedef struct
@@ -1949,7 +1949,7 @@ SV_FX_GetVisibility
 */
 float SV_FX_GetVisibility( const vec3_t start, const vec3_t end )
 {
-	return FX_GetVisibility( start, end );
+	return FX_GetServerVisibility( start, end );
 }
 
 static ucmd_t ucmds[] =

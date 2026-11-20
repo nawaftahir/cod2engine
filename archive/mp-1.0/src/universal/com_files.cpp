@@ -60,8 +60,8 @@ char *FS_ShiftedStrStr( const char *string, const char *substring, int shift );
 int FS_FOpenFileRead(const char *filename, fileHandle_t *file, qboolean uniqueFILE);
 const char *FS_ShortOSFilePath( const char *qpath );
 qboolean FS_SetWritable( const char *filename, int writable );
-int FS_SeekInternal( int f, int offset, int origin );
-int FS_GetOSPath( const char *qpath, char *ospath );
+int FS_Seek( int f, int offset, int origin );
+int FS_GetFileOsPath( const char *qpath, char *ospath );
 fileHandle_t FS_OpenFileOverwrite( const char *qpath );
 char **FS_ListFilteredFiles(searchpath_t *searchPath, const char *path, const char *extension, const char *filter, FsListBehavior behavior, int *numfiles, int allocType);
 char **FS_ListFilesOfDirType( const char *path, const char *extension, FsListBehavior behavior, int *numfiles, int dirTypes, int flags );
@@ -735,7 +735,7 @@ char *FS_ShiftedStrStr( const char *string, const char *substring, int shift )
 	return strstr(string, buf);
 }
 
-static qboolean FS_PureIgnoreFiles(const char *extension)
+static qboolean FS_PureIgnoresExtension(const char *extension)
 {
 	if (extension[0] == '.')
 		++extension;
@@ -1031,7 +1031,7 @@ static int FS_FOpenFileRead_Internal(const char *filename, int *file, qboolean u
 				extension = Com_GetExtensionSubString(src);
 
 				// check a file in the directory tree
-				if (!((!fs_restrict->current.boolean && !fs_numServerIwds) || i->localized || FS_PureIgnoreFiles(extension)))
+				if (!((!fs_restrict->current.boolean && !fs_numServerIwds) || i->localized || FS_PureIgnoresExtension(extension)))
 				{
 					if (!wasSkipped)
 					{
@@ -1059,7 +1059,7 @@ static int FS_FOpenFileRead_Internal(const char *filename, int *file, qboolean u
 						continue;
 					}
 
-					if (!i->localized && !FS_PureIgnoreFiles(extension))
+					if (!i->localized && !FS_PureIgnoresExtension(extension))
 					{
 						fs_fakeChkSum = rand() + 1;
 					}
@@ -1340,10 +1340,10 @@ void FS_Printf( fileHandle_t h, const char *fmt, ... )
 
 /*
 ==============
-FS_SeekInternal
+FS_Seek
 ==============
 */
-int FS_SeekInternal( int f, int offset, int origin )
+int FS_Seek( int f, int offset, int origin )
 {
 	int _origin;
 	int r;
@@ -1536,10 +1536,10 @@ int FS_WriteFile(const char* filename, const void* buffer, int size)
 
 /*
 ==============
-FS_GetOSPath
+FS_GetFileOsPath
 ==============
 */
-int FS_GetOSPath( const char *qpath, char *ospath )
+int FS_GetFileOsPath( const char *qpath, char *ospath )
 {
 	char sanitizedName[MAX_OSPATH];
 	searchpath_t *search;
@@ -1579,7 +1579,7 @@ fileHandle_t FS_OpenFileOverwrite( const char *qpath )
 	char ospath[MAX_OSPATH];
 	DWORD attrib;
 
-	if ( FS_GetOSPath(qpath, ospath) < 0 )
+	if ( FS_GetFileOsPath(qpath, ospath) < 0 )
 	{
 		Com_Error(ERR_DROP, "FS_FOpenFileOverWrite: Failed to open %s for writing.  It either does not exist or is in a iwd file.", qpath);
 		return 0;

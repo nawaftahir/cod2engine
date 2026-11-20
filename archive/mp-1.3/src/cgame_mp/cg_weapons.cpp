@@ -2070,8 +2070,8 @@ static qboolean __attribute_regparm__(3) CG_CalcMuzzlePoint(int entityNum, vec_t
     return 1;
 }
 
-// retail 0x4d1850, name unknown: tracer + whizby for a bullet hit
-static void CG_BulletHitTracer(int sourceEntityNum, vec_t *position, unsigned int flashTag)
+// Tracer and whizby for a bullet hit. Name from the Mac Steam symbols.
+static void CG_BulletTrajectoryEffects(int sourceEntityNum, vec_t *position, unsigned int flashTag)
 {
     vec3_t muzzle;
 
@@ -2119,7 +2119,7 @@ void CG_BulletHitEvent(int sourceEntityNum, vec_t *position, vec_t *normal, vec_
     if (fxReflect)
         FX_PlayEffect((EffectTemplate *)fxReflect, position, reflected);
 
-    CG_BulletHitTracer(sourceEntityNum, position, *s_barrelTags[0]);
+    CG_BulletTrajectoryEffects(sourceEntityNum, position, *s_barrelTags[0]);
 }
 
 void CG_BulletHitClientEvent(int sourceEntityNum, vec_t *position, int surfType, int event)
@@ -2134,7 +2134,7 @@ void CG_BulletHitClientEvent(int sourceEntityNum, vec_t *position, int surfType,
         alias = cgs->media.shotgunHitSound[surfType];
 
     CG_PlaySoundAlias(0x3fe, position, alias);
-    CG_BulletHitTracer(sourceEntityNum, position, *s_barrelTags[0]);
+    CG_BulletTrajectoryEffects(sourceEntityNum, position, *s_barrelTags[0]);
 }
 
 // Name from CoD4; original CoD2 name unknown.

@@ -302,8 +302,8 @@ int CG_DrawSmallDevStringColor(float x, float y, const char *s, const vec_t *col
 {
     return CG_DrawDevString(x, y, s, color, align, cgs->media.smallDevFont, 0);
 }
-// Original name unknown.
-byte CG_IsFullViewport(void)
+// Name from the Mac demo symbols.
+byte CG_IsFullViewportRendering(void)
 {
     return cgs->viewX == cg->refdef.x
         && cgs->viewY == cg->refdef.y
@@ -314,7 +314,7 @@ byte CG_IsFullViewport(void)
 void CG_TileClear(void)
 {
 
-    if (CG_IsFullViewport()) {
+    if (CG_IsFullViewportRendering()) {
         return;
     }
 
